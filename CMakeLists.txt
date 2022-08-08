@@ -13,3 +13,4 @@ enable_testing()
 set(ssm_definitions "")
 
 add_subdirectory(source)
+add_subdirectory(tests)
