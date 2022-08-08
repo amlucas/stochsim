@@ -1,5 +1,6 @@
 set(sources
   reaction.cpp
+  ssa.cpp
   )
 
 add_library(ssm SHARED ${sources})
