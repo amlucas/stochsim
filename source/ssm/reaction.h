@@ -17,6 +17,7 @@ public:
              std::vector<int> productSC);
 
     real computePropensity(std::span<const int> speciesNumber) const;
+    void applyChanges(std::span<int> speciesNumber) const;
 
 private:
 

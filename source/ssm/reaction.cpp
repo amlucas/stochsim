@@ -39,4 +39,17 @@ real Reaction::computePropensity(std::span<const int> speciesNumber) const
     return propensity;
 }
 
+void Reaction::applyChanges(std::span<int> speciesNumber) const
+{
+    for (size_t s = 0; s < reactantIds_.size(); ++s)
+    {
+        speciesNumber[reactantIds_[s]] -= reactantSCs_[s];
+    }
+
+    for (size_t s = 0; s < productIds_.size(); ++s)
+    {
+        speciesNumber[productIds_[s]] += productSCs_[s];
+    }
+}
+
 } // namespace ssm
