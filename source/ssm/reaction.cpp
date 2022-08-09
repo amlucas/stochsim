@@ -22,7 +22,7 @@ real Reaction::computePropensity(std::span<const int> speciesNumber) const
     for (size_t s = 0; s < reactantIds_.size(); ++s)
     {
         int nu = reactantSCs_[s];
-        const int x = speciesNumber[s];
+        const int x = speciesNumber[reactantIds_[s]];
 
         int numerator   = x;
         int denominator = nu;
