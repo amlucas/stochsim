@@ -78,10 +78,57 @@ TEST( reaction, maximum_allowed_firings )
 {
     const real rate = 2.345_r;
 
-    int numSpecies[] = {10, 20, 30};
+    const int numSpecies[] = {10, 20, 30};
     const Reaction reaction(rate, {0, 1, 2}, {3, 1, 2}, {1}, {5});
 
     ASSERT_EQ(reaction.maximumAllowedFirings(numSpecies), 3);
+}
+
+
+TEST( reaction, grad_propensity_first_order )
+{
+    const real rate = 2.345_r;
+
+    const int numSpecies[] = {10, 20, 30, 10};
+    real gradients[4];
+    const Reaction reaction(rate, {0, 1, 2}, {1, 1, 1}, {3}, {3});
+
+    reaction.computeGradPropensity(numSpecies, gradients);
+
+    ASSERT_EQ(gradients[0], rate * numSpecies[1] * numSpecies[2]);
+    ASSERT_EQ(gradients[1], rate * numSpecies[0] * numSpecies[2]);
+    ASSERT_EQ(gradients[2], rate * numSpecies[0] * numSpecies[1]);
+    ASSERT_EQ(gradients[3], 0.0_r);
+}
+
+TEST( reaction, grad_propensity_second_order )
+{
+    const real rate = 2.345_r;
+
+    const int numSpecies[] = {13, 17};
+    real gradients[2];
+    const Reaction reaction(rate, {0}, {2}, {1}, {1});
+
+    reaction.computeGradPropensity(numSpecies, gradients);
+
+    ASSERT_EQ(gradients[0], rate * (2*numSpecies[0]-1)/2.0_r);
+    ASSERT_EQ(gradients[1], 0.0_r);
+}
+
+TEST( reaction, grad_propensity_third_order )
+{
+    const real rate = 2.345_r;
+
+    const int numSpecies[] = {13, 17};
+    real gradients[2];
+    const Reaction reaction(rate, {0}, {3}, {1}, {1});
+
+    reaction.computeGradPropensity(numSpecies, gradients);
+
+    ASSERT_NEAR(gradients[0],
+                rate * (3*numSpecies[0]*numSpecies[0]-6*numSpecies[0]+2)/6.0_r,
+                1e-6_r);
+    ASSERT_EQ(gradients[1], 0.0_r);
 }
 
 
