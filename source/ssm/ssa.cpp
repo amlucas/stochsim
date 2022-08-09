@@ -18,8 +18,7 @@ void SSA::reset(std::vector<int> numSpecies)
 
 void SSA::advance()
 {
-    propensities_.resize(reactions_.size());
-    propensities_.assign(reactions_.size(), 0.0_r);
+    cumPropensities_.resize(reactions_.size());
 
     real a0 = 0.0_r;
 
@@ -29,7 +28,7 @@ void SSA::advance()
         const real a = r.computePropensity(numSpecies_);
 
         a0 += a;
-        propensities_[k] = a0;
+        cumPropensities_[k] = a0;
     }
 
     const real r1 = udistr_(gen_);
@@ -39,7 +38,7 @@ void SSA::advance()
     const real r2 = udistr_(gen_) * a0;
 
     size_t k = 0;
-    while (k < reactions_.size() && r2 > propensities_[k])
+    while (k < reactions_.size() && r2 > cumPropensities_[k])
     {
         ++k;
     }
