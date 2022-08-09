@@ -17,8 +17,9 @@ public:
              std::vector<int> productSC);
 
     real computePropensity(std::span<const int> speciesNumber) const;
-    void computeGradPropensity(std::span<const int> speciesNumber,
-                               std::span<real> dadx) const;
+
+    real computeGradPropensity(std::span<const int> speciesNumber, int i) const;
+    void computeGradPropensity(std::span<const int> speciesNumber, std::span<real> dadx) const;
 
     int maximumAllowedFirings(std::span<const int> speciesNumber) const;
 
