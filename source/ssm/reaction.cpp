@@ -1,5 +1,7 @@
 #include "reaction.h"
 
+#include <limits>
+
 namespace ssm {
 
 Reaction::Reaction(real rate,
@@ -37,6 +39,22 @@ real Reaction::computePropensity(std::span<const int> speciesNumber) const
     }
 
     return propensity;
+}
+
+int Reaction::maximumAllowedFirings(std::span<const int> speciesNumber) const
+{
+    int L = std::numeric_limits<int>::max();
+
+    for (size_t s = 0; s < reactantIds_.size(); ++s)
+    {
+        const int x  = speciesNumber[reactantIds_[s]];
+        const int nu = reactantSCs_[s];
+
+        if (nu > 0)
+            L = std::min(L, x/nu);
+    }
+
+    return L;
 }
 
 void Reaction::applyChanges(std::span<int> speciesNumber) const

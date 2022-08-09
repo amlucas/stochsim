@@ -74,6 +74,17 @@ TEST( reaction, propensity_complex )
 }
 
 
+TEST( reaction, maximum_allowed_firings )
+{
+    const real rate = 2.345_r;
+
+    int numSpecies[] = {10, 20, 30};
+    const Reaction reaction(rate, {0, 1, 2}, {3, 1, 2}, {1}, {5});
+
+    ASSERT_EQ(reaction.maximumAllowedFirings(numSpecies), 3);
+}
+
+
 
 TEST( reaction, apply_changes )
 {
