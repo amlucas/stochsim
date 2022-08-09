@@ -4,17 +4,9 @@ namespace ssm {
 
 SSA::SSA(std::vector<Reaction> reactions,
          std::vector<int> numSpecies)
-    : time_(0.0_r)
-    , reactions_(std::move(reactions))
-    , numSpecies_(std::move(numSpecies))
+    : StochasticSimulationMethod(std::move(reactions), std::move(numSpecies))
 {}
 
-
-void SSA::reset(std::vector<int> numSpecies)
-{
-    time_ = 0.0_r;
-    numSpecies_ = std::move(numSpecies);
-}
 
 void SSA::advance()
 {
@@ -44,16 +36,6 @@ void SSA::advance()
     }
 
     reactions_[k].applyChanges(numSpecies_);
-}
-
-real SSA::getTime() const
-{
-    return time_;
-}
-
-std::span<const int> SSA::getState() const
-{
-    return numSpecies_;
 }
 
 

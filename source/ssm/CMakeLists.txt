@@ -1,6 +1,7 @@
 set(sources
   reaction.cpp
   ssa.cpp
+  stochastic_simulation_method.cpp
   )
 
 add_library(ssm SHARED ${sources})
