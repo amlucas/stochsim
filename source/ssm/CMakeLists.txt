@@ -2,6 +2,7 @@ set(sources
   reaction.cpp
   ssa.cpp
   stochastic_simulation_method.cpp
+  tau_leaping.cpp
   )
 
 add_library(ssm SHARED ${sources})

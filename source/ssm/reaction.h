@@ -20,12 +20,13 @@ public:
 
     real computeGradPropensity(std::span<const int> speciesNumber, int i) const;
     void computeGradPropensity(std::span<const int> speciesNumber, std::span<real> dadx) const;
+    real computeF(std::span<const int> speciesNumber, std::span<const int> changes) const;
 
     int maximumAllowedFirings(std::span<const int> speciesNumber) const;
 
-    void applyChanges(std::span<int> speciesNumber) const;
+    void applyChanges(std::span<int> speciesNumber, int numFirings=1) const;
 
-    std::span<int> getStateChange(int numSpecies) const;
+    std::span<const int> getStateChange(int numSpecies) const;
 
 private:
 

@@ -97,6 +97,17 @@ void Reaction::computeGradPropensity(std::span<const int> speciesNumber,
         dadx[i] = computeGradPropensity(speciesNumber, i);
 }
 
+real Reaction::computeF(std::span<const int> speciesNumber,
+                        std::span<const int> changes) const
+{
+    real f = 0.0_r;
+
+    for (int i : reactantIds_)
+        f += computeGradPropensity(speciesNumber, i) * changes[i];
+
+    return f;
+}
+
 int Reaction::maximumAllowedFirings(std::span<const int> speciesNumber) const
 {
     int L = std::numeric_limits<int>::max();
@@ -113,20 +124,20 @@ int Reaction::maximumAllowedFirings(std::span<const int> speciesNumber) const
     return L;
 }
 
-void Reaction::applyChanges(std::span<int> speciesNumber) const
+void Reaction::applyChanges(std::span<int> speciesNumber, int numFirings) const
 {
     for (size_t s = 0; s < reactantIds_.size(); ++s)
     {
-        speciesNumber[reactantIds_[s]] -= reactantSCs_[s];
+        speciesNumber[reactantIds_[s]] -= numFirings * reactantSCs_[s];
     }
 
     for (size_t s = 0; s < productIds_.size(); ++s)
     {
-        speciesNumber[productIds_[s]] += productSCs_[s];
+        speciesNumber[productIds_[s]] += numFirings * productSCs_[s];
     }
 }
 
-std::span<int> Reaction::getStateChange(int numSpecies) const
+std::span<const int> Reaction::getStateChange(int numSpecies) const
 {
     if (stateChange_.size() == 0)
     {
