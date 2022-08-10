@@ -19,7 +19,7 @@ std::vector<int> collectReaction6Gillepsie2007(const std::vector<int>& initialNu
 
         const auto state = method.getState();
 
-        if (state[0] < (int) histogramS1.size())
+        if (state[0] >= 0 && state[0] < (int) histogramS1.size())
             ++histogramS1[state[0]];
     }
     return histogramS1;
@@ -28,7 +28,14 @@ std::vector<int> collectReaction6Gillepsie2007(const std::vector<int>& initialNu
 
 TEST( tau_leaping, reaction6Gillepsie2007_is_same_as_SSA )
 {
+    /** Test if we obtain the same distribution of S1 for both tau leaping
+        and SSA at time t=0.1 for the following reaction:
 
+           c1    c2
+        S1 -> S2 -> S2
+
+        with c1 = 0.1, c2=10.
+     */
 
     const real c1 = 0.1_r;
     const real c2 = 10.0_r;
@@ -57,8 +64,6 @@ TEST( tau_leaping, reaction6Gillepsie2007_is_same_as_SSA )
     {
         const real freqSSA = real(histSSA[k])/real(countSSA);
         const real freqTL  = real(histTL [k])/real(countTL );
-
-        printf("%g %g\n", freqSSA, freqTL);
 
         ASSERT_NEAR(freqSSA, freqTL, 0.1);
     }
