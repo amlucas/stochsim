@@ -25,6 +25,8 @@ public:
 
     void applyChanges(std::span<int> speciesNumber) const;
 
+    std::span<int> getStateChange(int numSpecies) const;
+
 private:
 
     real rate_;
@@ -32,6 +34,8 @@ private:
     std::vector<int> reactantSCs_;
     std::vector<SpeciesId> productIds_;
     std::vector<int> productSCs_;
+
+    mutable std::vector<int> stateChange_;
 };
 
 } // namespace ssm

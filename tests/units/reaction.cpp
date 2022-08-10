@@ -132,6 +132,24 @@ TEST( reaction, grad_propensity_third_order )
 }
 
 
+TEST( reaction, state_change )
+{
+    const real rate = 2.345_r;
+    constexpr int numSpecies = 6;
+
+    const Reaction reaction(rate, {0,2,4}, {3,1,2}, {1,3,4}, {5,2,1});
+
+    const auto changes = reaction.getStateChange(numSpecies);
+
+    ASSERT_EQ(changes[0], -3);
+    ASSERT_EQ(changes[1], +5);
+    ASSERT_EQ(changes[2], -1);
+    ASSERT_EQ(changes[3], +2);
+    ASSERT_EQ(changes[4], -1);
+    ASSERT_EQ(changes[5],  0);
+}
+
+
 
 TEST( reaction, apply_changes )
 {

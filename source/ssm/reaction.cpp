@@ -126,4 +126,15 @@ void Reaction::applyChanges(std::span<int> speciesNumber) const
     }
 }
 
+std::span<int> Reaction::getStateChange(int numSpecies) const
+{
+    if (stateChange_.size() == 0)
+    {
+        stateChange_.resize(numSpecies);
+        stateChange_.assign(numSpecies, 0);
+        applyChanges(stateChange_);
+    }
+    return stateChange_;
+}
+
 } // namespace ssm
