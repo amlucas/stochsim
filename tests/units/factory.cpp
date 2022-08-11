@@ -97,13 +97,13 @@ TEST( factory_simulation, with_diagnostic )
         {"rate": 10.0, "reaction": "S1->S2"},
         {"rate": 0.1, "reaction": "S2->S3"}
     ],
-    "tend": 0.1,
-    "numberOfRuns": 10000,
+    "tend": 100,
+    "numberOfRuns": 10,
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "test.csv",
-         "tend": 0.1,
-         "numBins": 100}
+         "tend": 100,
+         "numBins": 500}
     ]
 }
 )");

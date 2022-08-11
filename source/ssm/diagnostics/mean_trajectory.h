@@ -18,8 +18,8 @@ public:
 private:
     real dt_;
     int numBins_;
-    std::vector<int> sumTrajectories_;
-    std::vector<int> counts_;
+    std::vector<long long int> sumTrajectories_;
+    std::vector<long long int> counts_;
 };
 
 } // namespace ssm
