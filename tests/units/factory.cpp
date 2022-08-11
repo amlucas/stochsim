@@ -109,6 +109,4 @@ TEST( factory_simulation, with_diagnostic )
 )");
 
     EXPECT_NO_THROW( factory::createSimulation(config) );
-    auto sim = factory::createSimulation(config);
-    sim.run();
 }

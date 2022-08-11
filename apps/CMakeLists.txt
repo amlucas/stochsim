@@ -1,0 +1,2 @@
+add_executable(run_simulation run_simulation.cpp)
+target_link_libraries(run_simulation ssm)

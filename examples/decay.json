@@ -1,0 +1,24 @@
+{
+    "method" : {
+        "type": "TauLeaping",
+        "nc": 10,
+        "acceptFactor": 10,
+        "eps": 0.03,
+        "numStepsSSA": 100
+    },
+    "initialSpeciesNumbers": {
+        "A": 500,
+        "B": 0
+    },
+    "reactions": [
+        {"rate": 1.0, "reaction": "A->B"}
+    ],
+    "tend": 10,
+    "numberOfRuns": 10,
+    "diagnostics" : [
+        {"type": "meanTrajectory",
+         "fileName": "decay.csv",
+         "tend": 10,
+         "numBins": 500}
+    ]
+}

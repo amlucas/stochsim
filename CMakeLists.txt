@@ -12,6 +12,7 @@ enable_testing()
 
 set(ssm_definitions "")
 
+add_subdirectory(apps)
 add_subdirectory(extern)
 add_subdirectory(source)
 add_subdirectory(tests)
