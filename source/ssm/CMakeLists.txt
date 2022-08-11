@@ -1,6 +1,7 @@
 set(sources
   factory.cpp
   reaction.cpp
+  reaction_parser.cpp
   ssa.cpp
   stochastic_simulation_method.cpp
   tau_leaping.cpp
