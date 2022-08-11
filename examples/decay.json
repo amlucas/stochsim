@@ -1,10 +1,6 @@
 {
     "method" : {
-        "type": "TauLeaping",
-        "nc": 10,
-        "acceptFactor": 10,
-        "eps": 0.03,
-        "numStepsSSA": 100
+        "type": "SSA"
     },
     "initialSpeciesNumbers": {
         "A": 500,
