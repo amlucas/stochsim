@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stochastic_simulation_method.h"
+#include <ssm/solvers/solver.h>
 
 #include <memory>
 #include <string>
@@ -12,7 +12,7 @@ class Simulation
 public:
     Simulation(real tend,
                int numRuns,
-               std::unique_ptr<StochasticSimulationMethod> method,
+               std::unique_ptr<StochasticSimulationSolver> method,
                std::vector<int> initialConditions,
                std::vector<std::string> speciesNames);
 
@@ -21,7 +21,7 @@ public:
 private:
     real tend_;
     int numRuns_;
-    std::unique_ptr<StochasticSimulationMethod> method_;
+    std::unique_ptr<StochasticSimulationSolver> method_;
     std::vector<int> initialConditions_;
     std::vector<std::string> speciesNames_;
 };

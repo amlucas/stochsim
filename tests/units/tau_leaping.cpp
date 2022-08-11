@@ -1,4 +1,4 @@
-#include <ssm/tau_leaping.h>
+#include <ssm/solvers/tau_leaping.h>
 
 #include <gtest/gtest.h>
 

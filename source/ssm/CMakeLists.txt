@@ -3,13 +3,11 @@ set(sources
   reaction.cpp
   reaction_parser.cpp
   simulation.cpp
-  ssa.cpp
-  stochastic_simulation_method.cpp
-  tau_leaping.cpp
   )
 
 add_library(ssm SHARED ${sources})
 
+add_subdirectory(solvers)
 add_subdirectory(utils)
 
 target_compile_features(ssm PUBLIC cxx_std_20)

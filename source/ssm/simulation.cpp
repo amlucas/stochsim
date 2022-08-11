@@ -4,7 +4,7 @@ namespace ssm {
 
 Simulation::Simulation(real tend,
                        int numRuns,
-                       std::unique_ptr<StochasticSimulationMethod> method,
+                       std::unique_ptr<StochasticSimulationSolver> method,
                        std::vector<int> initialConditions,
                        std::vector<std::string> speciesNames)
     : tend_(tend)

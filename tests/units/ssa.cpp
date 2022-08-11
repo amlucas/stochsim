@@ -1,4 +1,4 @@
-#include <ssm/ssa.h>
+#include <ssm/solvers/ssa.h>
 
 #include <gtest/gtest.h>
 

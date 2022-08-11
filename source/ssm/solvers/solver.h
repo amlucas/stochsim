@@ -1,20 +1,20 @@
 #pragma once
 
-#include "reaction.h"
+#include <ssm/reaction.h>
 
 #include <span>
 #include <vector>
 
 namespace ssm {
 
-class StochasticSimulationMethod
+class StochasticSimulationSolver
 {
 public:
-    StochasticSimulationMethod(real tend,
+    StochasticSimulationSolver(real tend,
                                std::vector<Reaction> reactions,
                                std::vector<int> numSpecies);
 
-    virtual ~StochasticSimulationMethod();
+    virtual ~StochasticSimulationSolver();
 
     void reset(std::vector<int> numSpecies, real time = 0.0_r);
     virtual void advance() = 0;

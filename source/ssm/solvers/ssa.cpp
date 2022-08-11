@@ -5,7 +5,7 @@ namespace ssm {
 SSA::SSA(real tend,
          std::vector<Reaction> reactions,
          std::vector<int> numSpecies)
-    : StochasticSimulationMethod(tend,
+    : StochasticSimulationSolver(tend,
                                  std::move(reactions),
                                  std::move(numSpecies))
 {}

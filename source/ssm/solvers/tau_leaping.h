@@ -1,13 +1,13 @@
 #pragma once
 
-#include "stochastic_simulation_method.h"
+#include "solver.h"
 #include "ssa.h"
 
 #include <random>
 
 namespace ssm {
 
-class TauLeaping: public StochasticSimulationMethod
+class TauLeaping: public StochasticSimulationSolver
 {
 public:
     TauLeaping(real tend,

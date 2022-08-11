@@ -6,7 +6,7 @@ TauLeaping::TauLeaping(real tend,
                        int nc, real eps, real acceptFactor, int numStepsSSA,
                        std::vector<Reaction> reactions,
                        std::vector<int> numSpecies)
-    : StochasticSimulationMethod(tend,
+    : StochasticSimulationSolver(tend,
                                  std::move(reactions),
                                  std::move(numSpecies))
     , ssa_(tend, reactions_, numSpecies_)

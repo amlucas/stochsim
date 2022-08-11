@@ -1,8 +1,8 @@
-#include "stochastic_simulation_method.h"
+#include "solver.h"
 
 namespace ssm {
 
-StochasticSimulationMethod::StochasticSimulationMethod(real tend,
+StochasticSimulationSolver::StochasticSimulationSolver(real tend,
                                                        std::vector<Reaction> reactions,
                                                        std::vector<int> numSpecies)
     : tend_(tend)
@@ -11,20 +11,20 @@ StochasticSimulationMethod::StochasticSimulationMethod(real tend,
     , numSpecies_(std::move(numSpecies))
 {}
 
-StochasticSimulationMethod::~StochasticSimulationMethod() = default;
+StochasticSimulationSolver::~StochasticSimulationSolver() = default;
 
-void StochasticSimulationMethod::reset(std::vector<int> numSpecies, real time)
+void StochasticSimulationSolver::reset(std::vector<int> numSpecies, real time)
 {
     time_ = time;
     numSpecies_ = std::move(numSpecies);
 }
 
-real StochasticSimulationMethod::getTime() const
+real StochasticSimulationSolver::getTime() const
 {
     return time_;
 }
 
-std::span<const int> StochasticSimulationMethod::getState() const
+std::span<const int> StochasticSimulationSolver::getState() const
 {
     return numSpecies_;
 }

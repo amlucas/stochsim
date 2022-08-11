@@ -1,12 +1,12 @@
 #pragma once
 
-#include "stochastic_simulation_method.h"
+#include "solver.h"
 
 #include <random>
 
 namespace ssm {
 
-class SSA: public StochasticSimulationMethod
+class SSA: public StochasticSimulationSolver
 {
 public:
     SSA(real tend,

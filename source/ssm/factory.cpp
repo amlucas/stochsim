@@ -1,7 +1,7 @@
 #include "factory.h"
 
-#include <ssm/ssa.h>
-#include <ssm/tau_leaping.h>
+#include <ssm/solvers/ssa.h>
+#include <ssm/solvers/tau_leaping.h>
 
 #include <ssm/reaction_parser.h>
 
@@ -59,7 +59,7 @@ Simulation createSimulation(const json& j)
     const auto methodConfig = j.at("method");
     const std::string methodType = methodConfig.at("type").get<std::string>();
 
-    std::unique_ptr<StochasticSimulationMethod> method;
+    std::unique_ptr<StochasticSimulationSolver> method;
     if (methodType == "SSA")
     {
         method = std::make_unique<SSA>(tend, std::move(reactions), initialSpeciesNumbers);
