@@ -23,3 +23,28 @@ TEST( factory_reaction, from_json )
     ASSERT_EQ(reaction.computePropensity(numSpecies),
               0.1 * numSpecies[0] * numSpecies[1]);
 }
+
+
+TEST( factory_simulation, from_json )
+{
+    const auto config = factory::json::parse(R"(
+{
+    "method" : {
+        "type": "SSA"
+    },
+    "initial species numbers": {
+        "S1": 9,
+        "S2": 20000,
+        "S3": 0
+    },
+    "reactions": [
+        {"rate": 10.0, "reaction": "S1->S2"},
+        {"rate": 0.1, "reaction": "S2->S3"}
+    ],
+    "tend": 0.1,
+    "number of runs": 10000
+}
+)");
+
+    const Simulation sim = factory::createSimulation(config);
+}

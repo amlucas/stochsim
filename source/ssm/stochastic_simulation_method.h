@@ -14,6 +14,8 @@ public:
                                std::vector<Reaction> reactions,
                                std::vector<int> numSpecies);
 
+    virtual ~StochasticSimulationMethod();
+
     void reset(std::vector<int> numSpecies, real time = 0.0_r);
     virtual void advance() = 0;
 

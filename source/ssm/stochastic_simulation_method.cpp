@@ -11,6 +11,7 @@ StochasticSimulationMethod::StochasticSimulationMethod(real tend,
     , numSpecies_(std::move(numSpecies))
 {}
 
+StochasticSimulationMethod::~StochasticSimulationMethod() = default;
 
 void StochasticSimulationMethod::reset(std::vector<int> numSpecies, real time)
 {
