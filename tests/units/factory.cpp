@@ -25,7 +25,7 @@ TEST( factory_reaction, from_json )
 }
 
 
-TEST( factory_simulation, from_json )
+TEST( factory_simulation, from_json_ssa )
 {
     const auto config = factory::json::parse(R"(
 {
@@ -46,5 +46,33 @@ TEST( factory_simulation, from_json )
 }
 )");
 
-    const Simulation sim = factory::createSimulation(config);
+    EXPECT_NO_THROW( factory::createSimulation(config) );
+}
+
+TEST( factory_simulation, from_json_tau_leaping )
+{
+    const auto config = factory::json::parse(R"(
+{
+    "method" : {
+        "type": "TauLeaping",
+        "nc": 10,
+        "acceptFactor": 10,
+        "eps": 0.03,
+        "numStepsSSA": 100
+    },
+    "initial species numbers": {
+        "S1": 9,
+        "S2": 20000,
+        "S3": 0
+    },
+    "reactions": [
+        {"rate": 10.0, "reaction": "S1->S2"},
+        {"rate": 0.1, "reaction": "S2->S3"}
+    ],
+    "tend": 0.1,
+    "number of runs": 10000
+}
+)");
+
+    EXPECT_NO_THROW( factory::createSimulation(config) );
 }
