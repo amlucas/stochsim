@@ -2,9 +2,12 @@
 
 namespace ssm {
 
-SSA::SSA(std::vector<Reaction> reactions,
+SSA::SSA(real tend,
+         std::vector<Reaction> reactions,
          std::vector<int> numSpecies)
-    : StochasticSimulationMethod(std::move(reactions), std::move(numSpecies))
+    : StochasticSimulationMethod(tend,
+                                 std::move(reactions),
+                                 std::move(numSpecies))
 {}
 
 
@@ -24,8 +27,15 @@ void SSA::advance()
     }
 
     const real r1 = udistr_(gen_);
-    const real tau = - std::log(r1) / a0;
+
+    real tau = - std::log(r1) / a0;
+    if (time_ + tau > tend_)
+        tau = tend_ - time_;
+
     time_ += tau;
+
+    if (a0 == 0)
+        return;
 
     const real r2 = udistr_(gen_) * a0;
 

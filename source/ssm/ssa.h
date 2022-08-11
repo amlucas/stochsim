@@ -9,7 +9,8 @@ namespace ssm {
 class SSA: public StochasticSimulationMethod
 {
 public:
-    SSA(std::vector<Reaction> reactions,
+    SSA(real tend,
+        std::vector<Reaction> reactions,
         std::vector<int> numSpecies);
 
     void advance() override;

@@ -2,11 +2,14 @@
 
 namespace ssm {
 
-TauLeaping::TauLeaping(int nc, real eps, real acceptFactor, int numStepsSSA,
+TauLeaping::TauLeaping(real tend,
+                       int nc, real eps, real acceptFactor, int numStepsSSA,
                        std::vector<Reaction> reactions,
                        std::vector<int> numSpecies)
-    : StochasticSimulationMethod(std::move(reactions), std::move(numSpecies))
-    , ssa_(reactions_, numSpecies_)
+    : StochasticSimulationMethod(tend,
+                                 std::move(reactions),
+                                 std::move(numSpecies))
+    , ssa_(tend, reactions_, numSpecies_)
     , nc_(nc)
     , eps_(eps)
     , acceptFactor_(acceptFactor)
@@ -28,7 +31,7 @@ void TauLeaping::advance()
         a0 += a;
     }
 
-    // 2. select critical reactions
+    // 2. mark critical reactions
 
     isCriticalReaction_.resize(reactions_.size());
     bool allReactionsAreCritical = true;
@@ -38,7 +41,7 @@ void TauLeaping::advance()
         const real a = propensities_[k];
         const real L = reactions_[k].maximumAllowedFirings(numSpecies_);
 
-        const bool isCritical = (a > 0) && (L <= nc_);
+        const bool isCritical = !((a > 0) && (L <= nc_));
         isCriticalReaction_[k] = isCritical;
 
         if (!isCritical)
@@ -47,7 +50,7 @@ void TauLeaping::advance()
 
     // 3. estimate maximum tau
 
-    const real tauP = allReactionsAreCritical ?
+    real tauP = allReactionsAreCritical ?
         std::numeric_limits<real>::infinity() :
         estimateLargestTau();
 
@@ -56,18 +59,22 @@ void TauLeaping::advance()
     if (tauP < acceptFactor_ / a0)
     {
         // reject, execute SSA.
-        ssa_.reset(numSpecies_);
+        ssa_.reset(numSpecies_, time_);
+
         for (int i = 0; i < numStepsSSA_; ++i)
         {
             ssa_.advance();
+            if (ssa_.getTime() >= tend_)
+                break;
         }
-        time_ += ssa_.getTime();
-        auto newState = ssa_.getState();
-        std::copy(newState.begin(), newState.end(), numSpecies_.begin()) ;
+
+        time_ = ssa_.getTime();
+        const auto newState = ssa_.getState();
+        std::copy(newState.begin(), newState.end(), numSpecies_.begin());
     }
     else
     {
-        // accept
+        // accept, perform tau leap
         // 5. Generate taupp
         real a0c = 0;
         for (size_t i = 0; i < propensities_.size(); ++i)
@@ -77,10 +84,14 @@ void TauLeaping::advance()
         }
         const real tauPP = - std::log(udistr_(gen_)) / a0c;
 
-        real tau = tauP < tauPP ? tauP : tauPP;
-
+        real tau;
         bool anySpeciesNegative = false;
+
         do {
+            tau = tauP < tauPP ? tauP : tauPP;
+            if (time_ + tau > tend_)
+                tau = tend_ - time_;
+
             numFirings_.resize(reactions_.size());
             numFirings_.assign(reactions_.size(), 0);
 
@@ -111,7 +122,7 @@ void TauLeaping::advance()
 
                 const real u = a0c * udistr_(gen_);
                 size_t jc = 0;
-                while (jc < reactions_.size() && u > cumPropensities_[jc])
+                while (jc < reactions_.size() && (!isCriticalReaction_[jc] || u > cumPropensities_[jc]))
                 {
                     ++jc;
                 }
@@ -123,7 +134,11 @@ void TauLeaping::advance()
             candidateNumSpecies_ = numSpecies_;
 
             for (size_t i = 0; i < reactions_.size(); ++i)
-                reactions_[i].applyChanges(candidateNumSpecies_, numFirings_[i]);
+            {
+                const int ki = numFirings_[i];
+                if (ki > 0)
+                    reactions_[i].applyChanges(candidateNumSpecies_, ki);
+            }
 
             anySpeciesNegative = false;
             for (auto x : candidateNumSpecies_)
@@ -131,7 +146,7 @@ void TauLeaping::advance()
                 if (x < 0)
                 {
                     anySpeciesNegative = true;
-                    tau /= 2;
+                    tauP /= 2;
                     break;
                 }
             }

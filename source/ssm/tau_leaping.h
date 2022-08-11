@@ -10,7 +10,8 @@ namespace ssm {
 class TauLeaping: public StochasticSimulationMethod
 {
 public:
-    TauLeaping(int nc, real eps, real acceptFactor, int numStepsSSA,
+    TauLeaping(real tend,
+               int nc, real eps, real acceptFactor, int numStepsSSA,
                std::vector<Reaction> reactions,
                std::vector<int> numSpecies);
 

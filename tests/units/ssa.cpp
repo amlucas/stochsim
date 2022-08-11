@@ -11,7 +11,8 @@ TEST( ssa, decay )
     const int n0 = 10000;
     const int numRuns = 1000;
 
-    SSA ssa({Reaction{rate, {0}, {1}, {}, {}}},
+    SSA ssa(tend,
+            {Reaction{rate, {0}, {1}, {}, {}}},
             {n0});
 
     real meanEnd = 0.0_r;
@@ -40,7 +41,8 @@ TEST( ssa, equilibrium )
     const int n0 = 1000;
     const int numRuns = 1000;
 
-    SSA ssa({Reaction{rate, {0}, {1}, {1}, {1}}, // A -> B
+    SSA ssa(tend,
+            {Reaction{rate, {0}, {1}, {1}, {1}}, // A -> B
              Reaction{rate, {1}, {1}, {0}, {1}}}, // B -> A
             {n0, 0});
 
