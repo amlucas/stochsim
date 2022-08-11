@@ -12,7 +12,7 @@ Diagnostic::~Diagnostic() = default;
 
 void Diagnostic::dump(std::string fname)
 {
-    std::fstream stream(fname);
+    std::ofstream stream(fname);
     this->dump(stream);
 }
 

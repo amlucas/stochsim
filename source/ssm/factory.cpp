@@ -1,9 +1,10 @@
 #include "factory.h"
 
+#include <ssm/diagnostics/mean_trajectory.h>
+#include <ssm/reaction_parser.h>
 #include <ssm/solvers/ssa.h>
 #include <ssm/solvers/tau_leaping.h>
-
-#include <ssm/reaction_parser.h>
+#include <ssm/utils/strprintf.h>
 
 namespace ssm {
 namespace factory {
@@ -21,16 +22,38 @@ Reaction createReaction(const json& j)
             std::move(productsIds), std::move(productsSCs)};
 }
 
+
+static std::unique_ptr<Diagnostic> createDiagnostic(const json& j, std::vector<std::string> speciesNames)
+{
+    std::unique_ptr<Diagnostic> d;
+
+    const std::string type = j.at("type").get<std::string>();
+
+    if (type == "meanTrajectory")
+    {
+        const int numBins = j.at("numBins").get<int>();
+        const real tend = j.at("tend").get<real>();
+
+        d = std::make_unique<MeanTrajectoryDiagnostic>(std::move(speciesNames), tend, numBins);
+    }
+    else
+    {
+        throw std::runtime_error(utils::strprintf("Unknown diagnostic type '%s'", type.c_str()));
+    }
+    return d;
+}
+
+
 Simulation createSimulation(const json& j)
 {
     const real tend = j.at("tend").get<real>();
-    const int numRuns = j.at("number of runs").get<int>();
+    const int numRuns = j.at("numberOfRuns").get<int>();
 
     std::vector<int> initialSpeciesNumbers;
     std::vector<std::string> speciesNames;
     std::map<std::string, int> speciesNameToIdx;
 
-    for (const auto& [key, value] : j.at("initial species numbers").items())
+    for (const auto& [key, value] : j.at("initialSpeciesNumbers").items())
     {
         speciesNameToIdx[key] = (int) speciesNames.size();
         initialSpeciesNumbers.push_back(value);
@@ -76,10 +99,23 @@ Simulation createSimulation(const json& j)
     }
 
 
-    return {tend, numRuns,
-            std::move(method),
-            std::move(initialSpeciesNumbers),
-            std::move(speciesNames)};
+    Simulation sim(tend, numRuns,
+                   std::move(method),
+                   std::move(initialSpeciesNumbers),
+                   speciesNames);
+
+    if (j.contains("diagnostics"))
+    {
+        for (auto diagConfig : j.at("diagnostics"))
+        {
+            const auto fname = diagConfig.at("fileName").get<std::string>();
+            sim.attachDiagnostic(createDiagnostic(diagConfig, speciesNames),
+                                 fname);
+        }
+
+    }
+
+    return sim;
 }
 
 } // namespace factory

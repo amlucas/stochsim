@@ -32,7 +32,7 @@ TEST( factory_simulation, from_json_ssa )
     "method" : {
         "type": "SSA"
     },
-    "initial species numbers": {
+    "initialSpeciesNumbers": {
         "S1": 9,
         "S2": 20000,
         "S3": 0
@@ -42,7 +42,7 @@ TEST( factory_simulation, from_json_ssa )
         {"rate": 0.1, "reaction": "S2->S3"}
     ],
     "tend": 0.1,
-    "number of runs": 10000
+    "numberOfRuns": 10000
 }
 )");
 
@@ -60,7 +60,7 @@ TEST( factory_simulation, from_json_tau_leaping )
         "eps": 0.03,
         "numStepsSSA": 100
     },
-    "initial species numbers": {
+    "initialSpeciesNumbers": {
         "S1": 9,
         "S2": 20000,
         "S3": 0
@@ -70,9 +70,45 @@ TEST( factory_simulation, from_json_tau_leaping )
         {"rate": 0.1, "reaction": "S2->S3"}
     ],
     "tend": 0.1,
-    "number of runs": 10000
+    "numberOfRuns": 10000
 }
 )");
 
     EXPECT_NO_THROW( factory::createSimulation(config) );
+}
+
+TEST( factory_simulation, with_diagnostic )
+{
+    const auto config = factory::json::parse(R"(
+{
+    "method" : {
+        "type": "TauLeaping",
+        "nc": 10,
+        "acceptFactor": 10,
+        "eps": 0.03,
+        "numStepsSSA": 100
+    },
+    "initialSpeciesNumbers": {
+        "S1": 9,
+        "S2": 20000,
+        "S3": 0
+    },
+    "reactions": [
+        {"rate": 10.0, "reaction": "S1->S2"},
+        {"rate": 0.1, "reaction": "S2->S3"}
+    ],
+    "tend": 0.1,
+    "numberOfRuns": 10000,
+    "diagnostics" : [
+        {"type": "meanTrajectory",
+         "fileName": "test.csv",
+         "tend": 0.1,
+         "numBins": 100}
+    ]
+}
+)");
+
+    EXPECT_NO_THROW( factory::createSimulation(config) );
+    auto sim = factory::createSimulation(config);
+    sim.run();
 }

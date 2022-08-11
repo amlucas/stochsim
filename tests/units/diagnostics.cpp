@@ -42,5 +42,5 @@ TEST( mean_trajectory_diagnostic, multiple_bins_and_species )
     std::stringstream ss;
     d.dump(ss);
 
-    ASSERT_EQ(ss.str(),"time,A,B\n0,3,4\n0.25,2,3\n0.5,0,0\n0.75,0,0\n");
+    ASSERT_EQ(ss.str(),"time,A,B\n0,3,4\n0.25,2,3\n");
 }
