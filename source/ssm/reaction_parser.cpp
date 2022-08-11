@@ -4,7 +4,7 @@
 
 namespace ssm {
 
-static std::vector<std::string> splitStr(std::string s, std::string delim)
+static inline std::vector<std::string> splitStr(std::string s, std::string delim)
 {
     std::vector<std::string> ret;
 
@@ -19,11 +19,30 @@ static std::vector<std::string> splitStr(std::string s, std::string delim)
     return ret;
 }
 
-static bool isDigit(char c)
+static inline bool isDigit(char c)
 {
     return c >= '0' && c <= '9';
 }
 
+static inline std::string trimSpaces(std::string s)
+{
+    // trim left spaces
+    {
+        size_t i = 0;
+        while (i < s.size() && s[i] == ' ')
+            ++i;
+
+        s = s.substr(i);
+    }
+    // trim right spaces
+    {
+        int i = (int) s.size()-1;
+        while (i >= 0 && s[i] == ' ')
+            --i;
+        s = s.substr(0, i+1);
+    }
+    return s;
+}
 
 static std::tuple<std::vector<std::string>,
                   std::vector<int>>
@@ -35,6 +54,8 @@ parseSpeciesAndStoichiometricCoeffs(std::string s)
 
     for (auto entry : list)
     {
+        entry = trimSpaces(entry);
+
         size_t i = 0;
         while (i < entry.size() && isDigit(entry[i]))
             ++i;
@@ -42,7 +63,7 @@ parseSpeciesAndStoichiometricCoeffs(std::string s)
         const int sc = i > 0
             ? std::atoi(entry.substr(0,i).c_str())
             : 1;
-        const std::string name = entry.substr(i);
+        const std::string name = trimSpaces(entry.substr(i));
 
         names.push_back(name);
         SCs.push_back(sc);
