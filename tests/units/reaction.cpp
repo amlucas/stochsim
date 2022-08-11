@@ -15,6 +15,17 @@ TEST( reaction, propensity_no_reactants_is_rate )
               rate);
 }
 
+TEST( reaction, propensity_is_zero_for_zero_species )
+{
+    const real rate = 1.0_r;
+
+    int numSpecies[] = {0};
+    const Reaction reaction(rate, {0}, {1}, {}, {});
+
+    ASSERT_EQ(reaction.computePropensity(numSpecies),
+              0.0_r);
+}
+
 TEST( reaction, propensity_one_reactant )
 {
     const real rate = 2.345_r;

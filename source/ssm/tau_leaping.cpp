@@ -2,13 +2,15 @@
 
 namespace ssm {
 
-TauLeaping::TauLeaping(int nc, real eps,
+TauLeaping::TauLeaping(int nc, real eps, real acceptFactor, int numStepsSSA,
                        std::vector<Reaction> reactions,
                        std::vector<int> numSpecies)
     : StochasticSimulationMethod(std::move(reactions), std::move(numSpecies))
     , ssa_(reactions_, numSpecies_)
     , nc_(nc)
     , eps_(eps)
+    , acceptFactor_(acceptFactor)
+    , numStepsSSA_(numStepsSSA)
 {}
 
 
@@ -55,7 +57,7 @@ void TauLeaping::advance()
     {
         // reject, execute SSA.
         ssa_.reset(numSpecies_);
-        for (int i = 0; i < numSSASteps_; ++i)
+        for (int i = 0; i < numStepsSSA_; ++i)
         {
             ssa_.advance();
         }
@@ -75,8 +77,9 @@ void TauLeaping::advance()
         }
         const real tauPP = - std::log(udistr_(gen_)) / a0c;
 
-        bool anySpeciesNegative = false;
         real tau = tauP < tauPP ? tauP : tauPP;
+
+        bool anySpeciesNegative = false;
         do {
             numFirings_.resize(reactions_.size());
             numFirings_.assign(reactions_.size(), 0);

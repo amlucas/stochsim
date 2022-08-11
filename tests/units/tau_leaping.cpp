@@ -33,26 +33,23 @@ TEST( tau_leaping, reaction6Gillepsie2007_is_same_as_SSA )
 
            c1    c2
         S1 -> S2 -> S2
-
-        with c1 = 0.1, c2=10.
      */
 
-    const real c1 = 0.1_r;
-    const real c2 = 10.0_r;
+    const real c1 = 10.0_r;
+    const real c2 = 0.1_r;
 
     const std::vector<int> initialNumSpecies = {9, 20000, 0};
 
-    const int nc = 10;
+    const int nc = 0;
     const real eps = 0.03_r;
+    const real acceptFactor = 10.0_r;
+    const int numStepsSSA = 1;
 
-    TauLeaping tl(nc, eps,
-                  {Reaction(c1, {0}, {1}, {1}, {1}),
-                   Reaction(c2, {0}, {1}, {1}, {1})},
-                  initialNumSpecies);
+    const std::vector<Reaction> reactions = {Reaction(c1, {0}, {1}, {1}, {1}),
+                                             Reaction(c2, {1}, {1}, {2}, {1})};
 
-    SSA ssa({Reaction(c1, {0}, {1}, {1}, {1}),
-             Reaction(c2, {0}, {1}, {1}, {1})},
-            initialNumSpecies);
+    TauLeaping tl(nc, eps, acceptFactor, numStepsSSA, reactions, initialNumSpecies);
+    SSA ssa(reactions, initialNumSpecies);
 
     const auto histTL  = collectReaction6Gillepsie2007(initialNumSpecies, tl);
     const auto histSSA = collectReaction6Gillepsie2007(initialNumSpecies, ssa);
@@ -65,6 +62,8 @@ TEST( tau_leaping, reaction6Gillepsie2007_is_same_as_SSA )
         const real freqSSA = real(histSSA[k])/real(countSSA);
         const real freqTL  = real(histTL [k])/real(countTL );
 
-        ASSERT_NEAR(freqSSA, freqTL, 0.1);
+        ASSERT_NEAR(freqSSA, freqTL, 0.01);
+
+        //printf("%zu %g %g\n", k, freqSSA, freqTL);
     }
 }
