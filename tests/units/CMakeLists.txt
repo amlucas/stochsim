@@ -1,5 +1,6 @@
 add_executable(test_ssm
   main.cpp
+  factory.cpp
   reaction.cpp
   ssa.cpp
   tau_leaping.cpp)
