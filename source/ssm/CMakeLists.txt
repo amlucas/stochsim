@@ -9,6 +9,7 @@ set(sources
 
 add_library(ssm SHARED ${sources})
 
+add_subdirectory(utils)
 
 target_compile_features(ssm PUBLIC cxx_std_20)
 target_include_directories(ssm PUBLIC ${ssm_includes})

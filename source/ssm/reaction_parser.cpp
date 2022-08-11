@@ -1,4 +1,5 @@
 #include "reaction_parser.h"
+#include <ssm/utils/strprintf.h>
 
 #include <optional>
 
@@ -80,10 +81,26 @@ std::tuple<std::vector<std::string>,
            std::vector<int>>
 parseReactionString(std::string s)
 {
-    const auto reactProds = splitStr(std::move(s), "->");
+    const auto reactProds = splitStr(s, "->");
+
+    if (reactProds.size() != 2)
+    {
+        throw std::runtime_error(utils::strprintf("Wrong reaction format: expect exactly one '->', got '%s'", s.c_str()));
+    }
 
     auto [reactants, reactantsSCs] = parseSpeciesAndStoichiometricCoeffs(reactProds[0]);
     auto [products, productsSCs] = parseSpeciesAndStoichiometricCoeffs(reactProds[1]);
+
+    for (auto r : reactants)
+    {
+        if (r.size() == 0)
+            throw std::runtime_error("Reactant name is empty.");
+    }
+    for (auto r : products)
+    {
+        if (r.size() == 0)
+            throw std::runtime_error("Product name is empty.");
+    }
 
     return {std::move(reactants),
             std::move(reactantsSCs),

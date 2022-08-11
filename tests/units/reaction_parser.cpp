@@ -4,7 +4,16 @@
 
 using namespace ssm;
 
-TEST( reaction_parser, splits_string_correctly )
+TEST( reaction_parser, fails_on_wrong_format )
+{
+    EXPECT_THROW( parseReactionString("A+B->3C->D"), std::runtime_error );
+    EXPECT_THROW( parseReactionString("A + 3 -> C"), std::runtime_error );
+    EXPECT_THROW( parseReactionString("A + B -> C + "), std::runtime_error );
+    EXPECT_THROW( parseReactionString("A -> "), std::runtime_error );
+    EXPECT_THROW( parseReactionString(" -> B"), std::runtime_error );
+}
+
+TEST( reaction_parser, parse_no_spaces )
 {
     auto [reactants, reactantsSCs, products, productsSCs] = parseReactionString("A+B->3C");
 
