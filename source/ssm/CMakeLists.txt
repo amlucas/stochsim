@@ -7,6 +7,7 @@ set(sources
 
 add_library(ssm SHARED ${sources})
 
+add_subdirectory(diagnostics)
 add_subdirectory(solvers)
 add_subdirectory(utils)
 

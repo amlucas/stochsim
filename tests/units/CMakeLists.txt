@@ -1,5 +1,6 @@
 add_executable(test_ssm
   main.cpp
+  diagnostics.cpp
   factory.cpp
   reaction.cpp
   reaction_parser.cpp
