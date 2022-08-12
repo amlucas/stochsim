@@ -15,6 +15,9 @@
         {"type": "meanTrajectory",
          "fileName": "decay.csv",
          "tend": 10,
-         "numBins": 500}
+         "numBins": 500},
+        {"type": "collectTau",
+         "fileName": "tau_decay.csv",
+         "collectEvery": 1}
     ]
 }

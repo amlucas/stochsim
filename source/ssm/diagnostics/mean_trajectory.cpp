@@ -4,9 +4,10 @@ namespace ssm {
 
 MeanTrajectoryDiagnostic::MeanTrajectoryDiagnostic(std::vector<std::string> speciesNames,
                                                    real tend, int numBins)
-    : Diagnostic(std::move(speciesNames))
+    : Diagnostic()
     , dt_(tend / numBins)
     , numBins_(numBins)
+    , speciesNames_(std::move(speciesNames))
 {
     const size_t n = speciesNames_.size() * numBins;
     sumTrajectories_.resize(n);

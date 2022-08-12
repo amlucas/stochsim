@@ -1,5 +1,6 @@
 #include "factory.h"
 
+#include <ssm/diagnostics/collect_tau.h>
 #include <ssm/diagnostics/mean_trajectory.h>
 #include <ssm/reaction_parser.h>
 #include <ssm/solvers/ssa.h>
@@ -35,6 +36,12 @@ static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<s
         const real tend = j.at("tend").get<real>();
 
         d = std::make_unique<MeanTrajectoryDiagnostic>(std::move(speciesNames), tend, numBins);
+    }
+    else if (type == "collectTau")
+    {
+        const int collectEvery = j.at("collectEvery").get<int>();
+
+        d = std::make_unique<CollectTauDiagnostic>(collectEvery);
     }
     else
     {

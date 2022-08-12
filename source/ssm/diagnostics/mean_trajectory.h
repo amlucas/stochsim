@@ -18,6 +18,7 @@ public:
 private:
     real dt_;
     int numBins_;
+    std::vector<std::string> speciesNames_;
     std::vector<long long int> sumTrajectories_;
     std::vector<long long int> counts_;
 };
