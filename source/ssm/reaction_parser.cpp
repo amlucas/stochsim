@@ -53,6 +53,10 @@ parseSpeciesAndStoichiometricCoeffs(std::string s)
     std::vector<int> SCs;
     const auto list = splitStr(std::move(s), "+");
 
+    // special case of spaces only / empty string: return no reaction.
+    if (list.size() == 1 && trimSpaces(list[0]).size() == 0)
+        return {{}, {}};
+
     for (auto entry : list)
     {
         entry = trimSpaces(entry);

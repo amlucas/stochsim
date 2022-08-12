@@ -9,8 +9,6 @@ TEST( reaction_parser, fails_on_wrong_format )
     EXPECT_THROW( parseReactionString("A+B->3C->D"), std::runtime_error );
     EXPECT_THROW( parseReactionString("A + 3 -> C"), std::runtime_error );
     EXPECT_THROW( parseReactionString("A + B -> C + "), std::runtime_error );
-    EXPECT_THROW( parseReactionString("A -> "), std::runtime_error );
-    EXPECT_THROW( parseReactionString(" -> B"), std::runtime_error );
 }
 
 TEST( reaction_parser, parse_no_spaces )
@@ -57,4 +55,24 @@ TEST( reaction_parser, complex )
     ASSERT_EQ(reactantsSCs[2], 7);
     ASSERT_EQ(productsSCs[0], 3);
     ASSERT_EQ(productsSCs[1], 67);
+}
+
+TEST( reaction_parser, source_is_valid_reactions )
+{
+    auto [r, rSCs, p, pSCs] = parseReactionString("A ->");
+
+    ASSERT_EQ(r.size(), 1);
+    ASSERT_EQ(p.size(), 0);
+    ASSERT_EQ(rSCs[0], 1);
+    ASSERT_EQ(r[0], "A");
+}
+
+TEST( reaction_parser, sink_is_valid_reactions )
+{
+    auto [r, rSCs, p, pSCs] = parseReactionString(" -> B");
+
+    ASSERT_EQ(r.size(), 0);
+    ASSERT_EQ(p.size(), 1);
+    ASSERT_EQ(pSCs[0], 1);
+    ASSERT_EQ(p[0], "B");
 }
