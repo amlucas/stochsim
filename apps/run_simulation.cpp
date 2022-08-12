@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     }
 
     std::ifstream jsonFile(argv[1]);
-    auto config = ssm::factory::json::parse(jsonFile);
+    auto config = ssm::factory::Json::parse(jsonFile);
     auto sim = ssm::factory::createSimulation(config);
     sim.run();
 

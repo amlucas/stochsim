@@ -12,10 +12,10 @@
 namespace ssm {
 namespace factory {
 
-using json = nlohmann::json;
+using Json = nlohmann::json;
 
-Reaction createReaction(const json& j);
-Simulation createSimulation(const json& j);
+Reaction createReaction(const Json& j);
+Simulation createSimulation(const Json& j);
 
 } // namespace factory
 } // namespace ssm

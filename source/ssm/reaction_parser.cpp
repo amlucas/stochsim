@@ -20,11 +20,6 @@ static inline std::vector<std::string> splitStr(std::string s, std::string delim
     return ret;
 }
 
-static inline bool isDigit(char c)
-{
-    return c >= '0' && c <= '9';
-}
-
 static inline std::string trimSpaces(std::string s)
 {
     // trim left spaces
@@ -62,7 +57,7 @@ parseSpeciesAndStoichiometricCoeffs(std::string s)
         entry = trimSpaces(entry);
 
         size_t i = 0;
-        while (i < entry.size() && isDigit(entry[i]))
+        while (i < entry.size() && std::isdigit(entry[i]))
             ++i;
 
         const int sc = i > 0

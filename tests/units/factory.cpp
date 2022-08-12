@@ -7,7 +7,7 @@ using namespace ssm;
 TEST( factory_reaction, from_json )
 {
     // reaction A + B -> 2 C
-    const auto config = factory::json::parse(R"(
+    const auto config = factory::Json::parse(R"(
 {
     "rate": 0.1,
     "reactants_ids": [0, 1],
@@ -27,7 +27,7 @@ TEST( factory_reaction, from_json )
 
 TEST( factory_simulation, from_json_ssa )
 {
-    const auto config = factory::json::parse(R"(
+    const auto config = factory::Json::parse(R"(
 {
     "method" : {
         "type": "SSA"
@@ -51,7 +51,7 @@ TEST( factory_simulation, from_json_ssa )
 
 TEST( factory_simulation, from_json_tau_leaping )
 {
-    const auto config = factory::json::parse(R"(
+    const auto config = factory::Json::parse(R"(
 {
     "method" : {
         "type": "TauLeaping",
@@ -79,7 +79,7 @@ TEST( factory_simulation, from_json_tau_leaping )
 
 TEST( factory_simulation, with_diagnostic )
 {
-    const auto config = factory::json::parse(R"(
+    const auto config = factory::Json::parse(R"(
 {
     "method" : {
         "type": "TauLeaping",

@@ -9,7 +9,7 @@
 namespace ssm {
 namespace factory {
 
-Reaction createReaction(const json& j)
+Reaction createReaction(const Json& j)
 {
     const auto rate = j.at("rate").get<real>();
     auto reactantsIds = j.at("reactants_ids").get<std::vector<SpeciesId>>();
@@ -23,7 +23,7 @@ Reaction createReaction(const json& j)
 }
 
 
-static std::unique_ptr<Diagnostic> createDiagnostic(const json& j, std::vector<std::string> speciesNames)
+static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<std::string> speciesNames)
 {
     std::unique_ptr<Diagnostic> d;
 
@@ -44,7 +44,7 @@ static std::unique_ptr<Diagnostic> createDiagnostic(const json& j, std::vector<s
 }
 
 
-Simulation createSimulation(const json& j)
+Simulation createSimulation(const Json& j)
 {
     const real tend = j.at("tend").get<real>();
     const int numRuns = j.at("numberOfRuns").get<int>();
