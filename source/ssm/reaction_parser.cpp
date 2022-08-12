@@ -92,12 +92,7 @@ static inline bool containsSpaces(std::string name)
     return false;
 }
 
-std::tuple<std::vector<std::string>,
-           std::vector<int>,
-           std::vector<std::string>,
-           std::vector<int>,
-           std::vector<bool>>
-parseReactionString(std::string s)
+ParsedReactionString parseReactionString(std::string s)
 {
     const auto reactProds = splitStr(s, "->");
 

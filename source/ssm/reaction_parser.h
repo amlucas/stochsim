@@ -6,11 +6,15 @@
 
 namespace ssm {
 
-std::tuple<std::vector<std::string>,
-           std::vector<int>,
-           std::vector<std::string>,
-           std::vector<int>,
-           std::vector<bool>>
-parseReactionString(std::string s);
+struct ParsedReactionString
+{
+    std::vector<std::string> reactantNames;
+    std::vector<int> reactantSCs;
+    std::vector<std::string> productNames;
+    std::vector<int> productSCs;
+    std::vector<bool> isReactantReservoir;
+};
+
+ParsedReactionString parseReactionString(std::string s);
 
 } // namespace ssm
