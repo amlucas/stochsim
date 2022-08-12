@@ -87,6 +87,16 @@ static inline bool isReservoir(std::string name)
         *(name.end()-1) == ']';
 }
 
+static inline bool containsSpaces(std::string name)
+{
+    for (auto c : name)
+    {
+        if (c == ' ')
+            return true;
+    }
+    return false;
+}
+
 std::tuple<std::vector<std::string>,
            std::vector<int>,
            std::vector<std::string>,
@@ -108,11 +118,15 @@ parseReactionString(std::string s)
     {
         if (r.size() == 0)
             throw std::runtime_error("Reactant name is empty.");
+        if (containsSpaces(r))
+            throw std::runtime_error(utils::strprintf("Invalid reactant name '%s': must not contain spaces.", r.c_str()));
     }
     for (auto r : products)
     {
         if (r.size() == 0)
             throw std::runtime_error("Product name is empty.");
+        if (containsSpaces(r))
+            throw std::runtime_error(utils::strprintf("Invalid product name '%s': must not contain spaces.", r.c_str()));
     }
 
     std::vector<bool> isReactantReservoir;
