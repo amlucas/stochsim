@@ -28,5 +28,9 @@ if __name__ == '__main__':
 
     ax.set_xlabel(r"$t$")
     ax.set_ylabel(r"$x$")
+
+    ax.set_xlim(0,time[-1])
+    ax.set_ylim(0,)
+
     ax.legend()
     plt.show()

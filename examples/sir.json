@@ -1,0 +1,22 @@
+{
+    "method" : {
+        "type": "SSA"
+    },
+    "initialSpeciesNumbers": {
+        "S": 5000,
+        "I": 5,
+	"R": 0
+    },
+    "reactions": [
+        {"rate": 0.0005, "reaction": "S+I->2I"},
+	{"rate": 0.2, "reaction": "I->R"}
+    ],
+    "tend": 20,
+    "numberOfRuns": 1000,
+    "diagnostics" : [
+        {"type": "meanTrajectory",
+         "fileName": "sir.csv",
+         "tend": 20,
+         "numBins": 500}
+    ]
+}
