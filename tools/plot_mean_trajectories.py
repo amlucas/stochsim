@@ -9,6 +9,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("csv", type=str, help="csv file to plot.")
     parser.add_argument("--show-only", type=str, nargs='+', default=None, help="if set, show only these variables.")
+    parser.add_argument("--out", type=str, default=None, help="if set, save the figure to a file with this name.")
     args = parser.parse_args()
 
     to_show = args.show_only
@@ -28,9 +29,11 @@ if __name__ == '__main__':
 
     ax.set_xlabel(r"$t$")
     ax.set_ylabel(r"$x$")
-
     ax.set_xlim(0,time[-1])
     ax.set_ylim(0,)
-
     ax.legend()
-    plt.show()
+
+    if args.out is None:
+        plt.show()
+    else:
+        plt.savefig(args.out)

@@ -28,6 +28,8 @@ Running and plotting the results of the Brusselator example:
 ./tools/plot_mean_trajectories.py brusselator.csv --show-only Y1 Y2
 ```
 
+![brusselator](docs/images/brusselator.pdf)
+
 ## Reaction syntax
 
 Reactions are fully described by a rate and a string that describe the reactant and product names as well as their stoichiometric coefficients.
