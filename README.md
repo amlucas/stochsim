@@ -28,7 +28,7 @@ Running and plotting the results of the Brusselator example:
 ./tools/plot_mean_trajectories.py brusselator.csv --show-only Y1 Y2
 ```
 
-![brusselator](docs/images/brusselator.pdf)
+![brusselator](docs/images/brusselator.png)
 
 ## Reaction syntax
 
