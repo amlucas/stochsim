@@ -16,9 +16,9 @@ make -j
 make test
 ```
 
-# Running a simulation
+## Running a simulation
 
-Simulations are described in a json file (see `examples` directory).
+Simulations are described in a json file (see the `examples` directory).
 They are composed of a solver (e.g. the SSA algorithm), a list of reactions, the initial conditions, and extra parameters such as the number of runs and the simulation time.
 In addition, diagnostics can be attached to the simulation to information.
 
@@ -28,7 +28,7 @@ Running and plotting the results of the Brusselator example:
 ./tools/plot_mean_trajectories.py brusselator.csv --show-only Y1 Y2
 ```
 
-# Reaction syntax
+## Reaction syntax
 
 Reactions are fully described by a rate and a string that describe the reactant and product names as well as their stoichiometric coefficients.
 
