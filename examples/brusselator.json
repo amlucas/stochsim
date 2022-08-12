@@ -4,7 +4,7 @@
     },
     "initialSpeciesNumbers": {
         "[X1]": 50000,
-        "[X2]": 50000,
+        "[X2]": 500,
 	"Y1": 1000,
 	"Y2": 2000,
 	"Z1": 0,
@@ -12,12 +12,12 @@
     },
     "reactions": [
         {"rate": 0.1, "reaction": "[X1] -> Y1"},
-	{"rate": 0.001, "reaction": "[X2] + Y1 -> Y2 + Z1"},
+	{"rate": 0.1, "reaction": "[X2] + Y1 -> Y2 + Z1"},
 	{"rate": 0.00005, "reaction": "2 Y1 + Y2 -> 3 Y1"},
 	{"rate": 5, "reaction": "Y1 -> Z2"}
     ],
     "tend": 14,
-    "numberOfRuns": 1000,
+    "numberOfRuns": 1,
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "brusselator.csv",
