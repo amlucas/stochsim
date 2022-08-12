@@ -13,7 +13,7 @@ TEST( reaction_parser, fails_on_wrong_format )
 
 TEST( reaction_parser, parse_no_spaces )
 {
-    auto [reactants, reactantsSCs, products, productsSCs] = parseReactionString("A+B->3C");
+    auto [reactants, reactantsSCs, products, productsSCs, isReactantReservoir] = parseReactionString("A+B->3C");
 
     ASSERT_EQ(reactants.size(), 2);
     ASSERT_EQ(products.size(), 1);
@@ -23,11 +23,14 @@ TEST( reaction_parser, parse_no_spaces )
     ASSERT_EQ(reactantsSCs[0], 1);
     ASSERT_EQ(reactantsSCs[1], 1);
     ASSERT_EQ(productsSCs[0], 3);
+
+    ASSERT_FALSE(isReactantReservoir[0]);
+    ASSERT_FALSE(isReactantReservoir[1]);
 }
 
 TEST( reaction_parser, supports_spaces )
 {
-    auto [reactants, reactantsSCs, products, productsSCs] = parseReactionString("A + B -> 3 C");
+    auto [reactants, reactantsSCs, products, productsSCs, isReactantReservoir] = parseReactionString("A + B -> 3 C");
 
     ASSERT_EQ(reactants.size(), 2);
     ASSERT_EQ(products.size(), 1);
@@ -41,7 +44,7 @@ TEST( reaction_parser, supports_spaces )
 
 TEST( reaction_parser, complex )
 {
-    auto [reactants, reactantsSCs, products, productsSCs] = parseReactionString("A + 45 B + 7C-> 3 C +67D");
+    auto [reactants, reactantsSCs, products, productsSCs, isReactantReservoir] = parseReactionString("A + 45 B + 7C-> 3 C +67D");
 
     ASSERT_EQ(reactants.size(), 3);
     ASSERT_EQ(products.size(), 2);
@@ -59,7 +62,7 @@ TEST( reaction_parser, complex )
 
 TEST( reaction_parser, source_is_valid_reactions )
 {
-    auto [r, rSCs, p, pSCs] = parseReactionString("A ->");
+    auto [r, rSCs, p, pSCs, _] = parseReactionString("A ->");
 
     ASSERT_EQ(r.size(), 1);
     ASSERT_EQ(p.size(), 0);
@@ -69,10 +72,24 @@ TEST( reaction_parser, source_is_valid_reactions )
 
 TEST( reaction_parser, sink_is_valid_reactions )
 {
-    auto [r, rSCs, p, pSCs] = parseReactionString(" -> B");
+    auto [r, rSCs, p, pSCs, _] = parseReactionString(" -> B");
 
     ASSERT_EQ(r.size(), 0);
     ASSERT_EQ(p.size(), 1);
     ASSERT_EQ(pSCs[0], 1);
     ASSERT_EQ(p[0], "B");
+}
+
+TEST( reaction_parser, reservoir_variable )
+{
+    auto [r, rSCs, p, pSCs, isReactantReservoir] = parseReactionString("[A] -> B");
+
+    ASSERT_EQ(r.size(), 1);
+    ASSERT_EQ(p.size(), 1);
+    ASSERT_EQ(rSCs[0], 1);
+    ASSERT_EQ(pSCs[0], 1);
+    ASSERT_EQ(r[0], "[A]");
+    ASSERT_EQ(p[0], "B");
+
+    ASSERT_TRUE(isReactantReservoir[0]);
 }

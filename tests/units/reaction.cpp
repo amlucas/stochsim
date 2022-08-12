@@ -176,3 +176,21 @@ TEST( reaction, apply_changes )
     ASSERT_EQ(numSpecies[2], 8);
     ASSERT_EQ(numSpecies[3], 15);
 }
+
+TEST( reaction, apply_changes_with_reservoir_variables )
+{
+    const real rate = 2.345_r;
+
+    int numSpecies[] = {10, 10, 10, 10};
+    const Reaction reaction(rate,
+                            {0, 1, 2}, {3, 1, 2},
+                            {3}, {5},
+                            {true, false, false});
+
+    reaction.applyChanges(numSpecies);
+
+    ASSERT_EQ(numSpecies[0], 10);
+    ASSERT_EQ(numSpecies[1], 9);
+    ASSERT_EQ(numSpecies[2], 8);
+    ASSERT_EQ(numSpecies[3], 15);
+}

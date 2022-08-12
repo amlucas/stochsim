@@ -64,7 +64,7 @@ Simulation createSimulation(const json& j)
     for (auto reaction: j.at("reactions"))
     {
         const real rate = reaction.at("rate").get<real>();
-        auto [reactants, rSCs, products, pSCs] = parseReactionString(reaction.at("reaction"));
+        auto [reactants, rSCs, products, pSCs, isReservoir] = parseReactionString(reaction.at("reaction"));
 
         std::vector<int> reactantIds, productIds;
 
@@ -76,7 +76,8 @@ Simulation createSimulation(const json& j)
 
         reactions.emplace_back(rate,
                                std::move(reactantIds), std::move(rSCs),
-                               std::move(productIds), std::move(pSCs));
+                               std::move(productIds), std::move(pSCs),
+                               std::move(isReservoir));
     }
 
     const auto methodConfig = j.at("method");

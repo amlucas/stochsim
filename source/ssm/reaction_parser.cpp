@@ -78,11 +78,20 @@ parseSpeciesAndStoichiometricCoeffs(std::string s)
             std::move(SCs)};
 }
 
+static inline bool isReservoir(std::string name)
+{
+    name = trimSpaces(name);
+    return
+        name.size() > 2 &&
+        *(name.begin()) == '[' &&
+        *(name.end()-1) == ']';
+}
 
 std::tuple<std::vector<std::string>,
            std::vector<int>,
            std::vector<std::string>,
-           std::vector<int>>
+           std::vector<int>,
+           std::vector<bool>>
 parseReactionString(std::string s)
 {
     const auto reactProds = splitStr(s, "->");
@@ -106,10 +115,15 @@ parseReactionString(std::string s)
             throw std::runtime_error("Product name is empty.");
     }
 
+    std::vector<bool> isReactantReservoir;
+    for (const auto& name : reactants)
+        isReactantReservoir.push_back(isReservoir(name));
+
     return {std::move(reactants),
             std::move(reactantsSCs),
             std::move(products),
-            std::move(productsSCs)};
+            std::move(productsSCs),
+            std::move(isReactantReservoir)};
 }
 
 } // namespace ssm

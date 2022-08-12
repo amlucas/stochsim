@@ -14,7 +14,8 @@ public:
              std::vector<SpeciesId> reactantIds,
              std::vector<int> reactantSC,
              std::vector<SpeciesId> productIds,
-             std::vector<int> productSC);
+             std::vector<int> productSC,
+             std::vector<bool> isReactantReservoir = {});
 
     real computePropensity(std::span<const int> speciesNumber) const;
 
@@ -35,6 +36,7 @@ private:
     std::vector<int> reactantSCs_;
     std::vector<SpeciesId> productIds_;
     std::vector<int> productSCs_;
+    std::vector<bool> isReactantReservoir_;
 
     mutable std::vector<int> stateChange_;
 };

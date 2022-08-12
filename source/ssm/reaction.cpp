@@ -8,14 +8,21 @@ Reaction::Reaction(real rate,
                    std::vector<SpeciesId> reactantIds,
                    std::vector<int> reactantSCs,
                    std::vector<SpeciesId> productIds,
-                   std::vector<int> productSCs)
+                   std::vector<int> productSCs,
+                   std::vector<bool> isReactantReservoir)
     : rate_(rate)
     , reactantIds_(std::move(reactantIds))
     , reactantSCs_(std::move(reactantSCs))
     , productIds_(std::move(productIds))
     , productSCs_(std::move(productSCs))
-
-{}
+    , isReactantReservoir_(std::move(isReactantReservoir))
+{
+    if (reactantIds_.size() > 0 && isReactantReservoir_.size() == 0)
+    {
+        isReactantReservoir_.resize(reactantIds_.size());
+        isReactantReservoir_.assign(reactantIds_.size(), false);
+    }
+}
 
 real Reaction::computePropensity(std::span<const int> speciesNumber) const
 {
@@ -128,7 +135,8 @@ void Reaction::applyChanges(std::span<int> speciesNumber, int numFirings) const
 {
     for (size_t s = 0; s < reactantIds_.size(); ++s)
     {
-        speciesNumber[reactantIds_[s]] -= numFirings * reactantSCs_[s];
+        if (!isReactantReservoir_[s])
+            speciesNumber[reactantIds_[s]] -= numFirings * reactantSCs_[s];
     }
 
     for (size_t s = 0; s < productIds_.size(); ++s)
