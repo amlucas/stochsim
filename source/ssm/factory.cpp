@@ -43,6 +43,35 @@ static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<s
     return d;
 }
 
+static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, real tend,
+                                                                std::vector<Reaction> reactions,
+                                                                std::vector<int> initialSpeciesNumbers)
+{
+    const auto solverConfig = j.at("solver");
+    const std::string solverType = solverConfig.at("type").get<std::string>();
+
+    std::unique_ptr<StochasticSimulationSolver> solver;
+
+    if (solverType == "SSA")
+    {
+        solver = std::make_unique<SSA>(tend, std::move(reactions), initialSpeciesNumbers);
+    }
+    else if (solverType == "TauLeaping")
+    {
+        const real nc = solverConfig.at("nc").get<int>();
+        const real eps = solverConfig.at("eps").get<real>();
+        const real acceptFactor = solverConfig.at("acceptFactor").get<real>();
+        const int numStepsSSA = solverConfig.at("numStepsSSA").get<int>();
+
+        solver = std::make_unique<TauLeaping>(tend, nc, eps, acceptFactor, numStepsSSA,
+                                              std::move(reactions), initialSpeciesNumbers);
+    }
+    else
+    {
+        throw std::runtime_error(utils::strprintf("Unknown solver type '%s'", solverType.c_str()));
+    }
+    return solver;
+}
 
 Simulation createSimulation(const Json& j)
 {
@@ -80,28 +109,10 @@ Simulation createSimulation(const Json& j)
                                std::move(isReservoir));
     }
 
-    const auto methodConfig = j.at("method");
-    const std::string methodType = methodConfig.at("type").get<std::string>();
-
-    std::unique_ptr<StochasticSimulationSolver> method;
-    if (methodType == "SSA")
-    {
-        method = std::make_unique<SSA>(tend, std::move(reactions), initialSpeciesNumbers);
-    }
-    else if (methodType == "TauLeaping")
-    {
-        const real nc = methodConfig.at("nc").get<int>();
-        const real eps = methodConfig.at("eps").get<real>();
-        const real acceptFactor = methodConfig.at("acceptFactor").get<real>();
-        const int numStepsSSA = methodConfig.at("numStepsSSA").get<int>();
-
-        method = std::make_unique<TauLeaping>(tend, nc, eps, acceptFactor, numStepsSSA,
-                                              std::move(reactions), initialSpeciesNumbers);
-    }
-
+    auto solver = createSolver(j, tend, std::move(reactions), initialSpeciesNumbers);
 
     Simulation sim(tend, numRuns,
-                   std::move(method),
+                   std::move(solver),
                    std::move(initialSpeciesNumbers),
                    speciesNames);
 
@@ -113,7 +124,6 @@ Simulation createSimulation(const Json& j)
             sim.attachDiagnostic(createDiagnostic(diagConfig, speciesNames),
                                  fname);
         }
-
     }
 
     return sim;

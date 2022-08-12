@@ -29,7 +29,7 @@ TEST( factory_simulation, from_json_ssa )
 {
     const auto config = factory::Json::parse(R"(
 {
-    "method" : {
+    "solver" : {
         "type": "SSA"
     },
     "initialSpeciesNumbers": {
@@ -53,7 +53,7 @@ TEST( factory_simulation, from_json_tau_leaping )
 {
     const auto config = factory::Json::parse(R"(
 {
-    "method" : {
+    "solver" : {
         "type": "TauLeaping",
         "nc": 10,
         "acceptFactor": 10,
@@ -81,7 +81,7 @@ TEST( factory_simulation, with_diagnostic )
 {
     const auto config = factory::Json::parse(R"(
 {
-    "method" : {
+    "solver" : {
         "type": "TauLeaping",
         "nc": 10,
         "acceptFactor": 10,
