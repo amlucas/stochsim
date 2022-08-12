@@ -1,0 +1,65 @@
+{
+    "solver" : {
+        "type": "SSA"
+    },
+    "initialSpeciesNumbers": {
+        "PLac": 1,
+        "RNAP": 35,
+	"Ribosome": 350,
+	"PLacRNAP": 0,
+	"TrLacZ1": 0,
+	"TrLacZ2": 0,
+	"RbsLacZ": 0,
+	"TrLacY1": 0,
+	"TrLacY2": 0,
+	"RbsLacY": 0,
+	"RbsRibosomeLacZ": 0,
+	"RbsRibosomeLacY": 0,
+	"TrLbsLacY": 0,
+	"TrLbsLacZ": 0,
+	"LacY": 0,
+	"LacZ": 0,
+	"dgrLacY": 0,
+	"dgrLacZ": 0,
+	"dgrRbsLacY": 0,
+	"dgrRbsLacZ": 0,
+	"lactose": 0,
+	"product": 0
+    },
+    "reactions": [
+        {"rate": 0.17,       "reaction": "PLac + RNAP -> PLacRNAP"},
+	{"rate": 10,         "reaction": "PLacRNAP -> PLac + RNAP"},
+	{"rate": 1,          "reaction": "PLacRNAP -> TrLacZ1"},
+	{"rate": 1,          "reaction": "TrLacZ1 -> RbsLacZ + PLac + TrLacZ2"},
+	{"rate": 0.015,      "reaction": "TrLacZ2 -> TrLacY1"},
+	{"rate": 1,          "reaction": "TrLacY1 -> RbsLacY + TrLacY2"},
+	{"rate": 0.36,       "reaction": "TrLacY2 -> RNAP"},
+	{"rate": 0.17,       "reaction": "Ribosome + RbsLacZ -> RbsRibosomeLacZ"},
+	{"rate": 0.17,       "reaction": "Ribosome + RbsLacY -> RbsRibosomeLacY"},
+	{"rate": 0.45,       "reaction": "RbsRibosomeLacZ -> Ribosome + RbsLacZ"},
+	{"rate": 0.45,       "reaction": "RbsRibosomeLacY -> Ribosome + RbsLacY"},
+	{"rate": 0.4,        "reaction": "RbsRibosomeLacZ -> TrLbsLacZ + RbsLacZ"},
+	{"rate": 0.4,        "reaction": "RbsRibosomeLacY -> TrLbsLacY + RbsLacY"},
+	{"rate": 0.015,      "reaction": "TrRbsLacZ -> LacZ"},
+	{"rate": 0.036,      "reaction": "TrRbsLacY -> LacY"},
+	{"rate": 6.42e-5,    "reaction": "LacZ -> dgrLacZ"},
+	{"rate": 6.42e-5,    "reaction": "LacY -> dgrLacY"},
+	{"rate": 0.3,        "reaction": "RbsLacZ -> dgrRbsLacZ"},
+	{"rate": 0.3,        "reaction": "RbsLacY -> dgrRbsLacY"},
+	{"rate": 9.52e-5,    "reaction": "LacZ + lactose -> LacZlactose"},
+	{"rate": 431,        "reaction": "LacZlactose -> product + LacZ"},
+	{"rate": 14,         "reaction": "LacY -> lactose + LacY"}
+    ],
+    "tend": 2000,
+    "numberOfRuns": 1,
+    "diagnostics" : [
+        {"type": "meanTrajectory",
+         "fileName": "LacZLacY.csv",
+         "tend": 2000,
+         "numBins": 5000},
+
+	{"type": "collectTau",
+         "fileName": "LacZLacY_tau.csv",
+         "collectEvery": 1}
+    ]
+}
