@@ -29,20 +29,29 @@ void R0Leaping::advance()
     std::gamma_distribution<real> gammaDistr(L_, 1.0_r/a0);
 
     const real tau = gammaDistr(gen_);
+    time_ += tau;
 
     numFirings_.resize(reactions_.size());
-    numFirings_.assign(reactions_.size(), 0);
-
-    for (int i = 0; i < L_; ++i)
-    {
-        const size_t k = utils::choose(cumPropensities_, gen_);
-        ++numFirings_[k];
-    }
-
-    time_ += tau;
+    sampleNumFirings(L_, cumPropensities_, numFirings_, gen_);
 
     for (size_t i = 0; i < reactions_.size(); ++i)
         reactions_[i].applyChanges(numSpecies_, numFirings_[i]);
 }
+
+void R0Leaping::sampleNumFirings(int L,
+                                 std::span<const real> cumPropensities,
+                                 std::span<int> numFirings,
+                                 std::mt19937& gen)
+{
+    for (auto& n : numFirings)
+        n = 0;
+
+    for (int i = 0; i < L; ++i)
+    {
+        const size_t k = utils::choose(cumPropensities, gen);
+        ++numFirings[k];
+    }
+}
+
 
 } // namespace ssm

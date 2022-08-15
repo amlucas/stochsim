@@ -2,6 +2,7 @@ add_executable(test_ssm
   main.cpp
   diagnostics.cpp
   factory.cpp
+  R_leaping.cpp
   reaction.cpp
   reaction_parser.cpp
   ssa.cpp

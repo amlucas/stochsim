@@ -15,6 +15,11 @@ public:
 
     void advance() override;
 
+    static void sampleNumFirings(int L,
+                                 std::span<const real> cumPropensities,
+                                 std::span<int> numFirings,
+                                 std::mt19937& gen);
+
 private:
     int L_;
 
@@ -23,5 +28,9 @@ private:
 
     std::mt19937 gen_ {42424242L};
 };
+
+
+
+
 
 } // namespace ssm
