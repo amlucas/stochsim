@@ -4,6 +4,7 @@
 #include <ssm/diagnostics/mean_trajectory.h>
 #include <ssm/reaction_parser.h>
 #include <ssm/solvers/R0_leaping.h>
+#include <ssm/solvers/R1_leaping.h>
 #include <ssm/solvers/ssa.h>
 #include <ssm/solvers/tau_leaping.h>
 #include <ssm/utils/strprintf.h>
@@ -82,6 +83,14 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, r
         const int L = solverConfig.at("L").get<int>();
 
         solver = std::make_unique<R0Leaping>(tend, L,
+                                             std::move(reactions),
+                                             std::move(initialSpeciesNumbers));
+    }
+    else if (solverType == "R1Leaping")
+    {
+        const int L = solverConfig.at("L").get<int>();
+
+        solver = std::make_unique<R1Leaping>(tend, L,
                                              std::move(reactions),
                                              std::move(initialSpeciesNumbers));
     }

@@ -1,4 +1,5 @@
 #include <ssm/solvers/R0_leaping.h>
+#include <ssm/solvers/R1_leaping.h>
 
 #include <gtest/gtest.h>
 
@@ -16,6 +17,23 @@ TEST( R0_sampling, numFirings_sum_up_to_L )
     for (int i = 0; i < 100; ++i)
     {
         R0Leaping::sampleNumFirings(L, cumPropensities, numFirings, gen);
+        const int totNumFirings = std::accumulate(numFirings.begin(), numFirings.end(), 0);
+        ASSERT_EQ(L, totNumFirings);
+    }
+}
+
+TEST( R1_sampling, numFirings_sum_up_to_L )
+{
+    const int L = 13;
+
+    const std::vector<real> propensities = {0.1_r, 0.4_r, 0.5_r, 1.0_r, 1.0_r};
+    std::vector<int> numFirings(propensities.size());
+
+    std::mt19937 gen(23452342);
+
+    for (int i = 0; i < 100; ++i)
+    {
+        R1Leaping::sampleNumFirings(L, propensities, numFirings, gen);
         const int totNumFirings = std::accumulate(numFirings.begin(), numFirings.end(), 0);
         ASSERT_EQ(L, totNumFirings);
     }
