@@ -1,6 +1,10 @@
 {
     "solver" : {
-        "type": "SSA"
+        "type": "TauLeaping",
+	"nc": 10,
+	"eps": 0.03,
+	"numStepsSSA": 100,
+	"acceptFactor": 10
     },
     "initialSpeciesNumbers": {
         "PLac": 1,
@@ -51,7 +55,7 @@
 	{"rate": 14,         "reaction": "LacY -> lactose + LacY"}
     ],
     "tend": 2000,
-    "numberOfRuns": 1,
+    "numberOfRuns": 100,
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "LacZLacY.csv",

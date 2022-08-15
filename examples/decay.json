@@ -17,7 +17,7 @@
          "tend": 10,
          "numBins": 500},
         {"type": "collectTau",
-         "fileName": "tau_decay.csv",
+         "fileName": "decay_tau.csv",
          "collectEvery": 1}
     ]
 }
