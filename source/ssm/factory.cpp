@@ -3,6 +3,7 @@
 #include <ssm/diagnostics/collect_tau.h>
 #include <ssm/diagnostics/mean_trajectory.h>
 #include <ssm/reaction_parser.h>
+#include <ssm/solvers/R0_leaping.h>
 #include <ssm/solvers/ssa.h>
 #include <ssm/solvers/tau_leaping.h>
 #include <ssm/utils/strprintf.h>
@@ -61,7 +62,9 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, r
 
     if (solverType == "SSA")
     {
-        solver = std::make_unique<SSA>(tend, std::move(reactions), initialSpeciesNumbers);
+        solver = std::make_unique<SSA>(tend,
+                                       std::move(reactions),
+                                       std::move(initialSpeciesNumbers));
     }
     else if (solverType == "TauLeaping")
     {
@@ -71,7 +74,16 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, r
         const int numStepsSSA = solverConfig.at("numStepsSSA").get<int>();
 
         solver = std::make_unique<TauLeaping>(tend, nc, eps, acceptFactor, numStepsSSA,
-                                              std::move(reactions), initialSpeciesNumbers);
+                                              std::move(reactions),
+                                              std::move(initialSpeciesNumbers));
+    }
+    else if (solverType == "R0Leaping")
+    {
+        const int L = solverConfig.at("L").get<int>();
+
+        solver = std::make_unique<R0Leaping>(tend, L,
+                                             std::move(reactions),
+                                             std::move(initialSpeciesNumbers));
     }
     else
     {
