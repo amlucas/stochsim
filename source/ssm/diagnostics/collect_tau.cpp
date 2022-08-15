@@ -12,22 +12,20 @@ void CollectTauDiagnostic::collect(int runId, real time, std::span<const int> /*
     if (runId != currentRunId_)
     {
         currentRunId_ = runId;
+        numCollected_ = 0;
     }
     else
     {
-        if (numCollected_ == collectEvery_)
+        if (numCollected_ % collectEvery_ == 0)
         {
             const real tau = time - previousTime_;
             times_.push_back(previousTime_);
             taus_.push_back(tau);
         }
+        ++numCollected_;
     }
 
     previousTime_ = time;
-    numCollected_ += 1;
-
-    if (numCollected_ > collectEvery_)
-        numCollected_ = 0;
 }
 
 void CollectTauDiagnostic::dump(std::ostream& stream)
