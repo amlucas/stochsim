@@ -1,5 +1,7 @@
 #include "ssa.h"
 
+#include <ssm/utils/choose.h>
+
 namespace ssm {
 
 SSA::SSA(real tend,
@@ -37,14 +39,7 @@ void SSA::advance()
     if (a0 == 0)
         return;
 
-    const real r2 = udistr_(gen_) * a0;
-
-    size_t k = 0;
-    while (k < reactions_.size() && r2 > cumPropensities_[k])
-    {
-        ++k;
-    }
-
+    const size_t k = utils::choose(cumPropensities_, gen_);
     reactions_[k].applyChanges(numSpecies_);
 }
 
