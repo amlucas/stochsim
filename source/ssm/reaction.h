@@ -22,6 +22,8 @@ public:
 
     int computeOrder() const;
 
+    int getReactantSC(SpeciesId i) const;
+
     real computeGradPropensity(std::span<const int> speciesNumber, int i) const;
     void computeGradPropensity(std::span<const int> speciesNumber, std::span<real> dadx) const;
     real computeF(std::span<const int> speciesNumber, std::span<const int> changes) const;

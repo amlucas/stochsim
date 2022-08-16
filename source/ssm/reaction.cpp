@@ -56,6 +56,16 @@ int Reaction::computeOrder() const
     return order;
 }
 
+int Reaction::getReactantSC(SpeciesId i) const
+{
+    for (size_t j = 0; j < reactantIds_.size(); ++j)
+    {
+        if (reactantIds_[j] == i)
+            return reactantSCs_[j];
+    }
+    return 0;
+}
+
 real Reaction::computeGradPropensity(std::span<const int> speciesNumber,
                                      int i) const
 {

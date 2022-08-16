@@ -99,6 +99,17 @@ TEST( reaction, order )
     ASSERT_EQ(r4.computeOrder(), 4);
 }
 
+TEST( reaction, get_SC_reactant )
+{
+    const Reaction r1(0.1_r, {0, 3}, {2, 4}, {0}, {4});
+
+    ASSERT_EQ(r1.getReactantSC(0), 2);
+    ASSERT_EQ(r1.getReactantSC(1), 0);
+    ASSERT_EQ(r1.getReactantSC(2), 0);
+    ASSERT_EQ(r1.getReactantSC(3), 4);
+    ASSERT_EQ(r1.getReactantSC(4), 0);
+}
+
 TEST( reaction, maximum_allowed_firings )
 {
     const real rate = 2.345_r;
