@@ -3,6 +3,7 @@
 #include "types.h"
 
 #include <span>
+#include <tuple>
 #include <vector>
 
 namespace ssm {
@@ -19,9 +20,13 @@ public:
 
     real computePropensity(std::span<const int> speciesNumber) const;
 
+    int computeOrder() const;
+
     real computeGradPropensity(std::span<const int> speciesNumber, int i) const;
     void computeGradPropensity(std::span<const int> speciesNumber, std::span<real> dadx) const;
     real computeF(std::span<const int> speciesNumber, std::span<const int> changes) const;
+
+    std::tuple<real, real> computeMuHatSigmaHatSquare(std::span<const real> propensities) const;
 
     int maximumAllowedFirings(std::span<const int> speciesNumber) const;
 

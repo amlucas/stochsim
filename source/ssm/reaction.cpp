@@ -48,6 +48,14 @@ real Reaction::computePropensity(std::span<const int> speciesNumber) const
     return propensity;
 }
 
+int Reaction::computeOrder() const
+{
+    int order = 0;
+    for (auto nu : reactantSCs_)
+        order += nu;
+    return order;
+}
+
 real Reaction::computeGradPropensity(std::span<const int> speciesNumber,
                                      int i) const
 {
@@ -114,6 +122,22 @@ real Reaction::computeF(std::span<const int> speciesNumber,
 
     return f;
 }
+
+std::tuple<real, real> Reaction::computeMuHatSigmaHatSquare(std::span<const real> propensities) const
+{
+    real muHat = 0.0_r;
+    real sigmaHatSq = 0.0_r;
+
+    for (size_t i = 0; i < reactantIds_.size(); ++i)
+    {
+        const int nu = reactantSCs_[i];
+        const real a = propensities[reactantIds_[i]];
+        muHat += nu * a;
+        sigmaHatSq += nu * nu * a;
+    }
+    return {muHat, sigmaHatSq};
+}
+
 
 int Reaction::maximumAllowedFirings(std::span<const int> speciesNumber) const
 {

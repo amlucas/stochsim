@@ -84,6 +84,20 @@ TEST( reaction, propensity_complex )
               numSpecies[2] * (numSpecies[2]-1) / 2);
 }
 
+TEST( reaction, order )
+{
+    const Reaction r1(0.1, {}, {}, {0}, {1});
+    ASSERT_EQ(r1.computeOrder(), 0);
+
+    const Reaction r2(0.1, {0}, {1}, {1}, {1});
+    ASSERT_EQ(r2.computeOrder(), 1);
+
+    const Reaction r3(0.1, {0, 1}, {1, 1}, {1}, {1});
+    ASSERT_EQ(r3.computeOrder(), 2);
+
+    const Reaction r4(0.1, {0, 1}, {1, 3}, {1}, {1});
+    ASSERT_EQ(r4.computeOrder(), 4);
+}
 
 TEST( reaction, maximum_allowed_firings )
 {
@@ -142,6 +156,24 @@ TEST( reaction, grad_propensity_third_order )
     ASSERT_EQ(gradients[1], 0.0_r);
 }
 
+TEST (reaction, muHat_sigmaHatSquare )
+{
+    const std::vector<real> propensities = {0.1_r, 0.5_r, 0.3_r};
+
+    {
+        const Reaction r1(0.01_r, {0}, {1}, {1}, {2});
+        const auto [muHat, sigmaHatSq] = r1.computeMuHatSigmaHatSquare(propensities);
+        ASSERT_EQ(muHat, 1 * propensities[0]);
+        ASSERT_EQ(sigmaHatSq, 1 * 1 * propensities[0]);
+    }
+
+    {
+        const Reaction r1(0.01_r, {0, 2}, {1, 3}, {1}, {2});
+        const auto [muHat, sigmaHatSq] = r1.computeMuHatSigmaHatSquare(propensities);
+        ASSERT_EQ(muHat, 1 * propensities[0] + 3 * propensities[2]);
+        ASSERT_EQ(sigmaHatSq, 1 * 1 * propensities[0] + 3 * 3 * propensities[2]);
+    }
+}
 
 TEST( reaction, state_change )
 {
