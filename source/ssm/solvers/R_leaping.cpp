@@ -98,6 +98,24 @@ static void computeMuHatSigmaHatSq(std::span<const Reaction> reactions,
     }
 }
 
+static int computeLpp(real theta, real a0,
+                      std::span<const Reaction> reactions,
+                      std::span<const int> numSpecies,
+                      std::span<const real> propensities)
+{
+    int Lpp = std::numeric_limits<int>::max();
+    for (size_t j = 0; j < reactions.size(); ++j)
+    {
+        const int Lj = reactions[j].maximumAllowedFirings(numSpecies);
+        const real aj = propensities[j];
+        if (aj == 0.0_r)
+            continue;
+        const int proposed = (1.0_r - theta * (1.0_r - a0/aj)) * Lj;
+        Lpp = std::min(Lpp, proposed);
+    }
+    return Lpp;
+}
+
 void RLeaping::advance()
 {
     const real a0 = computePropensities(reactions_, numSpecies_,
@@ -107,17 +125,7 @@ void RLeaping::advance()
                            muHat_, sigmaHatSq_);
 
     const int Lp = computeReactionLeap(a0);
-
-    int Lpp = std::numeric_limits<int>::max();
-    for (size_t j = 0; j < reactions_.size(); ++j)
-    {
-        const int Lj = reactions_[j].maximumAllowedFirings(numSpecies_);
-        const real aj = propensities_[j];
-        if (aj == 0)
-            continue;
-        const int proposed = (1.0_r - theta_ * (1.0_r - a0/aj)) * Lj;
-        Lpp = std::min(Lpp, proposed);
-    }
+    const int Lpp = computeLpp(theta_, a0, reactions_, numSpecies_, propensities_);
 
     int L = std::min(Lp, Lpp);
     bool allSpeciesPositiveAfterChange = false;
@@ -153,7 +161,6 @@ void RLeaping::advance()
     }
 
     std::swap(numSpecies_, candidateNumSpecies_);
-
 
     std::gamma_distribution<real> gammaDistr(L, 1.0_r/a0);
     const real tau = gammaDistr(gen_);
@@ -203,6 +210,7 @@ int RLeaping::computeReactionLeap(real a0) const
         const real sigmaTerm = increment * increment / std::abs(sigmaHatSq - muHat*muHat/a0);
 
         const real Lcandidate = a0 * std::min(muTerm, sigmaTerm);
+
         L = std::min(L+1e-6_r, Lcandidate);
     }
     return (int) L;
