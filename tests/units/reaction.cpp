@@ -169,20 +169,44 @@ TEST( reaction, grad_propensity_third_order )
 
 TEST (reaction, muHat_sigmaHatSquare )
 {
+    const int n = 4;
     const std::vector<real> propensities = {0.1_r, 0.5_r, 0.3_r};
+    std::vector<real> muHat(n), sigmaHatSq(n);
 
     {
-        const Reaction r1(0.01_r, {0}, {1}, {1}, {2});
-        const auto [muHat, sigmaHatSq] = r1.computeMuHatSigmaHatSquare(propensities);
-        ASSERT_EQ(muHat, 1 * propensities[0]);
-        ASSERT_EQ(sigmaHatSq, 1 * 1 * propensities[0]);
+        const Reaction r(0.01_r, {0}, {1}, {1}, {2});
+
+        muHat     .assign(n, 0.0_r);
+        sigmaHatSq.assign(n, 0.0_r);
+        r.addContributionMuHatSigmaHatSquare(propensities[0], muHat, sigmaHatSq);
+
+        ASSERT_EQ(muHat[0], 1 * propensities[0]);
+        ASSERT_EQ(muHat[1], 0.0_r);
+        ASSERT_EQ(muHat[2], 0.0_r);
+        ASSERT_EQ(muHat[3], 0.0_r);
+
+        ASSERT_EQ(sigmaHatSq[0], 1 * 1 * propensities[0]);
+        ASSERT_EQ(sigmaHatSq[1], 0.0_r);
+        ASSERT_EQ(sigmaHatSq[2], 0.0_r);
+        ASSERT_EQ(sigmaHatSq[3], 0.0_r);
     }
 
     {
-        const Reaction r1(0.01_r, {0, 2}, {1, 3}, {1}, {2});
-        const auto [muHat, sigmaHatSq] = r1.computeMuHatSigmaHatSquare(propensities);
-        ASSERT_EQ(muHat, 1 * propensities[0] + 3 * propensities[2]);
-        ASSERT_EQ(sigmaHatSq, 1 * 1 * propensities[0] + 3 * 3 * propensities[2]);
+        const Reaction r(0.01_r, {0, 2}, {1, 3}, {1}, {2});
+
+        muHat     .assign(n, 0.0_r);
+        sigmaHatSq.assign(n, 0.0_r);
+        r.addContributionMuHatSigmaHatSquare(propensities[0], muHat, sigmaHatSq);
+
+        ASSERT_EQ(muHat[0], 1 * propensities[0]);
+        ASSERT_EQ(muHat[1], 0.0_r);
+        ASSERT_EQ(muHat[2], 3 * propensities[0]);
+        ASSERT_EQ(muHat[3], 0.0_r);
+
+        ASSERT_EQ(sigmaHatSq[0], 1 * 1 * propensities[0]);
+        ASSERT_EQ(sigmaHatSq[1], 0.0_r);
+        ASSERT_EQ(sigmaHatSq[2], 3 * 3 * propensities[0]);
+        ASSERT_EQ(sigmaHatSq[3], 0.0_r);
     }
 }
 

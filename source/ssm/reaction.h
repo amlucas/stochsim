@@ -28,7 +28,9 @@ public:
     void computeGradPropensity(std::span<const int> speciesNumber, std::span<real> dadx) const;
     real computeF(std::span<const int> speciesNumber, std::span<const int> changes) const;
 
-    std::tuple<real, real> computeMuHatSigmaHatSquare(std::span<const real> propensities) const;
+    void addContributionMuHatSigmaHatSquare(real propensity,
+                                            std::span<real> muHat,
+                                            std::span<real> sigmaHatSq) const;
 
     int maximumAllowedFirings(std::span<const int> speciesNumber) const;
 

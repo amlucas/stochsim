@@ -1,6 +1,8 @@
 {
     "solver" : {
-        "type": "SSA"
+        "type": "RLeaping",
+	"eps": 0.03,
+	"theta": 0.1
     },
     "initialSpeciesNumbers": {
         "S": 5000,

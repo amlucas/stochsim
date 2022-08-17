@@ -5,6 +5,7 @@
 #include <ssm/reaction_parser.h>
 #include <ssm/solvers/R0_leaping.h>
 #include <ssm/solvers/R1_leaping.h>
+#include <ssm/solvers/R_leaping.h>
 #include <ssm/solvers/ssa.h>
 #include <ssm/solvers/tau_leaping.h>
 #include <ssm/utils/strprintf.h>
@@ -93,6 +94,15 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, r
         solver = std::make_unique<R1Leaping>(tend, L,
                                              std::move(reactions),
                                              std::move(initialSpeciesNumbers));
+    }
+    else if (solverType == "RLeaping")
+    {
+        const real eps = solverConfig.at("eps").get<real>();
+        const real theta = solverConfig.at("theta").get<real>();
+
+        solver = std::make_unique<RLeaping>(tend, eps, theta,
+                                            std::move(reactions),
+                                            std::move(initialSpeciesNumbers));
     }
     else
     {

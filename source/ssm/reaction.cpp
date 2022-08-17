@@ -133,19 +133,17 @@ real Reaction::computeF(std::span<const int> speciesNumber,
     return f;
 }
 
-std::tuple<real, real> Reaction::computeMuHatSigmaHatSquare(std::span<const real> propensities) const
+void Reaction::addContributionMuHatSigmaHatSquare(real propensity,
+                                                  std::span<real> muHat,
+                                                  std::span<real> sigmaHatSq) const
 {
-    real muHat = 0.0_r;
-    real sigmaHatSq = 0.0_r;
-
     for (size_t i = 0; i < reactantIds_.size(); ++i)
     {
+        const int id = reactantIds_[i];
         const int nu = reactantSCs_[i];
-        const real a = propensities[reactantIds_[i]];
-        muHat += nu * a;
-        sigmaHatSq += nu * nu * a;
+        muHat[id] += nu * propensity;
+        sigmaHatSq[id] += nu * nu * propensity;
     }
-    return {muHat, sigmaHatSq};
 }
 
 
