@@ -2,6 +2,7 @@
 #include <ssm/utils/strprintf.h>
 
 #include <optional>
+#include <span>
 
 namespace ssm {
 
@@ -92,6 +93,22 @@ static inline bool containsSpaces(std::string name)
     return false;
 }
 
+static void checkDuplicates(std::span<const std::string> species)
+{
+    for (const auto& name : species)
+    {
+        int count = 0;
+        for (const auto& s : species)
+        {
+            if (name == s)
+                ++count;
+        }
+        if (count != 1)
+            throw std::runtime_error(utils::strprintf("Duplicated name '%s' in reaction.", name.c_str()));
+    }
+}
+
+
 ParsedReactionString parseReactionString(std::string s)
 {
     const auto reactProds = splitStr(s, "->");
@@ -118,6 +135,9 @@ ParsedReactionString parseReactionString(std::string s)
         if (containsSpaces(r))
             throw std::runtime_error(utils::strprintf("Invalid product name '%s': must not contain spaces.", r.c_str()));
     }
+
+    checkDuplicates(reactants);
+    checkDuplicates(products);
 
     std::vector<bool> isReactantReservoir;
     for (const auto& name : reactants)

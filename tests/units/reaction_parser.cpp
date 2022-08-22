@@ -27,6 +27,14 @@ TEST( reaction_parser, fails_on_wrong_format )
     ASSERT_THROW_MESSAGE(parseReactionString("A -> C D"),
                          std::runtime_error,
                          "Invalid product name 'C D': must not contain spaces.");
+
+    ASSERT_THROW_MESSAGE(parseReactionString("A + A -> C"),
+                         std::runtime_error,
+                         "Duplicated name 'A' in reaction.");
+
+    ASSERT_THROW_MESSAGE(parseReactionString("A -> B + B + C"),
+                         std::runtime_error,
+                         "Duplicated name 'B' in reaction.");
 }
 
 TEST( reaction_parser, parse_no_spaces )
