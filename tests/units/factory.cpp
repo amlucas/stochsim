@@ -49,30 +49,6 @@ TEST( factory_simulation, from_json_ssa )
     EXPECT_NO_THROW( factory::createSimulation(config) );
 }
 
-TEST( factory_simulation, missing_initial_product_value )
-{
-    const auto config = factory::Json::parse(R"(
-{
-    "solver" : {
-        "type": "SSA"
-    },
-    "initialSpeciesNumbers": {
-        "S1": 9,
-        "S3": 0
-    },
-    "reactions": [
-        {"rate": 10.0, "reaction": "S1->S2"},
-        {"rate": 0.1, "reaction": "S2->S3"}
-    ],
-    "tend": 0.1,
-    "numberOfRuns": 10000
-}
-)");
-
-    EXPECT_THROW( factory::createSimulation(config), std::runtime_error );
-}
-
-
 TEST( factory_simulation, missing_initial_reactant_value )
 {
     const auto config = factory::Json::parse(R"(
@@ -81,19 +57,59 @@ TEST( factory_simulation, missing_initial_reactant_value )
         "type": "SSA"
     },
     "initialSpeciesNumbers": {
-        "S1": 20000,
-        "S3": 0
+        "B": 10
     },
     "reactions": [
-        {"rate": 10.0, "reaction": "S1->S2"},
-        {"rate": 0.1, "reaction": "S2->S3"}
+        {"rate": 1.0, "reaction": "A->B"}
     ],
     "tend": 0.1,
-    "numberOfRuns": 10000
+    "numberOfRuns": 1
 }
 )");
 
-    EXPECT_THROW( factory::createSimulation(config), std::runtime_error );
+    EXPECT_THROW({
+            try
+            {
+                factory::createSimulation(config);
+            }
+            catch (const std::runtime_error& e)
+            {
+                ASSERT_STREQ(e.what(), "Reactant 'A': missing initial value.");
+                throw;
+            }
+        }, std::runtime_error );
+}
+
+
+TEST( factory_simulation, missing_initial_product_value )
+{
+    const auto config = factory::Json::parse(R"(
+{
+    "solver" : {
+        "type": "SSA"
+    },
+    "initialSpeciesNumbers": {
+        "A": 10
+    },
+    "reactions": [
+        {"rate": 1.0, "reaction": "A->B"}
+    ],
+    "tend": 0.1,
+    "numberOfRuns": 1
+}
+)");
+
+    EXPECT_THROW({
+            try
+            {
+                factory::createSimulation(config);
+            }
+            catch (const std::runtime_error& e)
+            {
+                ASSERT_STREQ(e.what(), "Product 'B': missing initial value.");
+                throw;
+            }
+        }, std::runtime_error );
 }
 
 
