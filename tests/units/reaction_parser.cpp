@@ -4,52 +4,38 @@
 
 using namespace ssm;
 
+#define ASSERT_THROW_MESSAGE(command, exception_type, message)          \
+    EXPECT_THROW({                                                      \
+    try {                                                               \
+        command;                                                        \
+    } catch (const exception_type & e) {                                \
+    ASSERT_STREQ(e.what(), message);                                    \
+    throw;                                                              \
+    }                                                                   \
+    }, exception_type )
+
+
 TEST( reaction_parser, fails_on_wrong_format )
 {
-    EXPECT_THROW({
-            try {
-                parseReactionString("A+B->3C->D");
-            } catch (std::runtime_error e) {
-                ASSERT_STREQ(e.what(), "Wrong reaction format: expect exactly one '->', got 'A+B->3C->D'");
-                throw;
-            }
-        }, std::runtime_error );
+    ASSERT_THROW_MESSAGE(parseReactionString("A+B->3C->D"),
+                         std::runtime_error,
+                         "Wrong reaction format: expect exactly one '->', got 'A+B->3C->D'");
 
-    EXPECT_THROW({
-            try {
-                parseReactionString("A + 3 -> C");
-            } catch (std::runtime_error e) {
-                ASSERT_STREQ(e.what(), "Reactant name is empty.");
-                throw;
-            }
-        }, std::runtime_error );
+    ASSERT_THROW_MESSAGE(parseReactionString("A + 3 -> C"),
+                         std::runtime_error,
+                         "Reactant name is empty.");
 
-    EXPECT_THROW({
-            try {
-                parseReactionString("A + B -> C + ");
-            } catch (std::runtime_error e) {
-                ASSERT_STREQ(e.what(), "Product name is empty.");
-                throw;
-            }
-        }, std::runtime_error );
+    ASSERT_THROW_MESSAGE(parseReactionString("A + B -> C + "),
+                         std::runtime_error,
+                         "Product name is empty.");
 
-    EXPECT_THROW({
-            try {
-                parseReactionString("A B -> C");
-            } catch (std::runtime_error e) {
-                ASSERT_STREQ(e.what(), "Invalid reactant name 'A B': must not contain spaces.");
-                throw;
-            }
-        }, std::runtime_error );
+    ASSERT_THROW_MESSAGE(parseReactionString("A B -> C"),
+                         std::runtime_error,
+                         "Invalid reactant name 'A B': must not contain spaces.");
 
-    EXPECT_THROW({
-            try {
-                parseReactionString("A -> C D");
-            } catch (std::runtime_error e) {
-                ASSERT_STREQ(e.what(), "Invalid product name 'C D': must not contain spaces.");
-                throw;
-            }
-        }, std::runtime_error );
+    ASSERT_THROW_MESSAGE(parseReactionString("A -> C D"),
+                         std::runtime_error,
+                         "Invalid product name 'C D': must not contain spaces.");
 }
 
 TEST( reaction_parser, parse_no_spaces )
