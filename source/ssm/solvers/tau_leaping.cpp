@@ -193,7 +193,7 @@ real TauLeaping::estimateLargestTau() const
     for (size_t i = 0; i < numReactions; ++i)
     {
         const real muTerm    = eps_ * a0 / std::abs(mu_[i]);
-        const real sigmaTerm = eps_ * eps_ * a0 * a0 / (sigmaSquare_[i] * sigmaSquare_[i]);
+        const real sigmaTerm = eps_ * eps_ * a0 * a0 / sigmaSquare_[i];
 
         tau = std::min(tau, std::min(muTerm, sigmaTerm));
     }
