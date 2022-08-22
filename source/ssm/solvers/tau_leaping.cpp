@@ -94,8 +94,7 @@ void TauLeaping::advance()
         do {
             tau = std::min(tauP, tauPP);
 
-            numFirings_.resize(reactions_.size());
-            numFirings_.assign(reactions_.size(), 0);
+            numFirings_.resize(reactions_.size(), 0);
 
             // 6
             for (size_t i = 0; i < reactions_.size(); ++i)
@@ -164,10 +163,8 @@ real TauLeaping::estimateLargestTau() const
 {
     const size_t numReactions = reactions_.size();
 
-    mu_.resize(numReactions);
-    mu_.assign(numReactions, 0.0_r);
-    sigmaSquare_.resize(numReactions);
-    sigmaSquare_.assign(numReactions, 0.0_r);
+    mu_.resize(numReactions, 0.0_r);
+    sigmaSquare_.resize(numReactions, 0.0_r);
 
     real a0 = 0.0_r;
     for (size_t j = 0; j < numReactions; ++j)

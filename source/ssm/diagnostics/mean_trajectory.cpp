@@ -10,10 +10,8 @@ MeanTrajectoryDiagnostic::MeanTrajectoryDiagnostic(std::vector<std::string> spec
     , speciesNames_(std::move(speciesNames))
 {
     const size_t n = speciesNames_.size() * numBins;
-    sumTrajectories_.resize(n);
-    sumTrajectories_.assign(n, 0);
-    counts_.resize(numBins);
-    counts_.assign(numBins, 0);
+    sumTrajectories_.resize(n, 0);
+    counts_.resize(numBins, 0);
 }
 
 void MeanTrajectoryDiagnostic::collect(int /* runId */, real time, std::span<const int> state)

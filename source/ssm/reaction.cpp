@@ -19,8 +19,7 @@ Reaction::Reaction(real rate,
 {
     if (reactantIds_.size() > 0 && isReactantReservoir_.size() == 0)
     {
-        isReactantReservoir_.resize(reactantIds_.size());
-        isReactantReservoir_.assign(reactantIds_.size(), false);
+        isReactantReservoir_.resize(reactantIds_.size(), false);
     }
 }
 
@@ -181,8 +180,7 @@ std::span<const int> Reaction::getStateChange(int numSpecies) const
 {
     if (stateChange_.size() == 0)
     {
-        stateChange_.resize(numSpecies);
-        stateChange_.assign(numSpecies, 0);
+        stateChange_.resize(numSpecies, 0);
         applyChanges(stateChange_);
     }
     return stateChange_;
