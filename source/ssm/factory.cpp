@@ -136,10 +136,28 @@ Simulation createSimulation(const Json& j)
         std::vector<int> reactantIds, productIds;
 
         for (auto name : reactants)
-            reactantIds.push_back(speciesNameToIdx[name]);
+        {
+            if (auto it = speciesNameToIdx.find(name); it != speciesNameToIdx.end())
+            {
+                reactantIds.push_back(it->second);
+            }
+            else
+            {
+                throw std::runtime_error(utils::strprintf("Reactant '%s': missing initial value.", name.c_str()));
+            }
+        }
 
         for (auto name : products)
-            productIds.push_back(speciesNameToIdx[name]);
+        {
+            if (auto it = speciesNameToIdx.find(name); it != speciesNameToIdx.end())
+            {
+                productIds.push_back(it->second);
+            }
+            else
+            {
+                throw std::runtime_error(utils::strprintf("Product '%s': missing initial value.", name.c_str()));
+            }
+        }
 
         reactions.emplace_back(rate,
                                std::move(reactantIds), std::move(rSCs),

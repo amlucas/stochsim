@@ -49,6 +49,54 @@ TEST( factory_simulation, from_json_ssa )
     EXPECT_NO_THROW( factory::createSimulation(config) );
 }
 
+TEST( factory_simulation, missing_initial_product_value )
+{
+    const auto config = factory::Json::parse(R"(
+{
+    "solver" : {
+        "type": "SSA"
+    },
+    "initialSpeciesNumbers": {
+        "S1": 9,
+        "S3": 0
+    },
+    "reactions": [
+        {"rate": 10.0, "reaction": "S1->S2"},
+        {"rate": 0.1, "reaction": "S2->S3"}
+    ],
+    "tend": 0.1,
+    "numberOfRuns": 10000
+}
+)");
+
+    EXPECT_THROW( factory::createSimulation(config), std::runtime_error );
+}
+
+
+TEST( factory_simulation, missing_initial_reactant_value )
+{
+    const auto config = factory::Json::parse(R"(
+{
+    "solver" : {
+        "type": "SSA"
+    },
+    "initialSpeciesNumbers": {
+        "S1": 20000,
+        "S3": 0
+    },
+    "reactions": [
+        {"rate": 10.0, "reaction": "S1->S2"},
+        {"rate": 0.1, "reaction": "S2->S3"}
+    ],
+    "tend": 0.1,
+    "numberOfRuns": 10000
+}
+)");
+
+    EXPECT_THROW( factory::createSimulation(config), std::runtime_error );
+}
+
+
 TEST( factory_simulation, from_json_tau_leaping )
 {
     const auto config = factory::Json::parse(R"(
