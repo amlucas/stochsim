@@ -1,5 +1,7 @@
 #include <ssm/factory.h>
 
+#include "utils.h"
+
 #include <gtest/gtest.h>
 
 using namespace ssm;
@@ -67,17 +69,9 @@ TEST( factory_simulation, missing_initial_reactant_value )
 }
 )");
 
-    EXPECT_THROW({
-            try
-            {
-                factory::createSimulation(config);
-            }
-            catch (const std::runtime_error& e)
-            {
-                ASSERT_STREQ(e.what(), "Reactant 'A': missing initial value.");
-                throw;
-            }
-        }, std::runtime_error );
+    ASSERT_THROW_MESSAGE(factory::createSimulation(config),
+                         std::runtime_error,
+                         "Reactant 'A': missing initial value.");
 }
 
 
@@ -99,17 +93,9 @@ TEST( factory_simulation, missing_initial_product_value )
 }
 )");
 
-    EXPECT_THROW({
-            try
-            {
-                factory::createSimulation(config);
-            }
-            catch (const std::runtime_error& e)
-            {
-                ASSERT_STREQ(e.what(), "Product 'B': missing initial value.");
-                throw;
-            }
-        }, std::runtime_error );
+    ASSERT_THROW_MESSAGE(factory::createSimulation(config),
+                         std::runtime_error,
+                         "Product 'B': missing initial value.");
 }
 
 

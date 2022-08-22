@@ -1,19 +1,10 @@
 #include <ssm/reaction_parser.h>
 
+#include "utils.h"
+
 #include <gtest/gtest.h>
 
 using namespace ssm;
-
-#define ASSERT_THROW_MESSAGE(command, exception_type, message)          \
-    EXPECT_THROW({                                                      \
-    try {                                                               \
-        command;                                                        \
-    } catch (const exception_type & e) {                                \
-    ASSERT_STREQ(e.what(), message);                                    \
-    throw;                                                              \
-    }                                                                   \
-    }, exception_type )
-
 
 TEST( reaction_parser, fails_on_wrong_format )
 {
