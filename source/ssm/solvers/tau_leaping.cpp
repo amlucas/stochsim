@@ -41,7 +41,7 @@ void TauLeaping::advance()
         const real a = propensities_[k];
         const real L = reactions_[k].maximumAllowedFirings(numSpecies_);
 
-        const bool isCritical = !((a > 0) && (L <= nc_));
+        const bool isCritical = (a > 0) && (L <= nc_);
         isCriticalReaction_[k] = isCritical;
 
         if (!isCritical)
@@ -53,6 +53,10 @@ void TauLeaping::advance()
     real tauP = allReactionsAreCritical ?
         std::numeric_limits<real>::infinity() :
         estimateLargestTau();
+
+    if (time_ + tauP > tend_)
+        tauP = tend_ - time_;
+
 
     // 4. Accept of reject
 
@@ -88,9 +92,7 @@ void TauLeaping::advance()
         bool anySpeciesNegative = false;
 
         do {
-            tau = tauP < tauPP ? tauP : tauPP;
-            if (time_ + tau > tend_)
-                tau = tend_ - time_;
+            tau = std::min(tauP, tauPP);
 
             numFirings_.resize(reactions_.size());
             numFirings_.assign(reactions_.size(), 0);
