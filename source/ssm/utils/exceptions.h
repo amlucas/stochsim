@@ -48,5 +48,14 @@ public:
     {}
 };
 
+class ValueError: public BaseException
+{
+public:
+    template<class... Args>
+    ValueError(const char *fmt, Args&&... args)
+        : BaseException(fmt, std::forward<Args>(args)...)
+    {}
+};
+
 
 } // namespace ssm

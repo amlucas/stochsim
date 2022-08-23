@@ -1,8 +1,27 @@
 #include <ssm/reaction.h>
+#include "utils.h"
+
+#include <ssm/utils/exceptions.h>
 
 #include <gtest/gtest.h>
 
 using namespace ssm;
+
+TEST( reaction, throw_errors_for_wrong_values )
+{
+    ASSERT_THROW_MESSAGE(Reaction r(-0.5_r, {0}, {1}, {}, {}),
+                         ValueError,
+                         "Reaction rate must be strictly positive, got -0.5");
+
+    ASSERT_THROW_MESSAGE(Reaction r(0.5_r, {0}, {0}, {}, {}),
+                         ValueError,
+                         "Reactant stoichiometric coefficient must be strictly positive, got 0");
+
+    ASSERT_THROW_MESSAGE(Reaction r(0.5_r, {0}, {2}, {1}, {-1}),
+                         ValueError,
+                         "Product stoichiometric coefficient must be strictly positive, got -1");
+}
+
 
 TEST( reaction, propensity_no_reactants_is_rate )
 {

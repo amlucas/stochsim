@@ -1,5 +1,7 @@
 #include "reaction.h"
 
+#include <ssm/utils/exceptions.h>
+
 #include <limits>
 
 namespace ssm {
@@ -21,6 +23,21 @@ Reaction::Reaction(real rate,
     {
         isReactantReservoir_.resize(reactantIds_.size(), false);
     }
+
+    for (auto sc: reactantSCs_)
+    {
+        if (sc <= 0)
+            throw ValueError("Reactant stoichiometric coefficient must be strictly positive, got %d", sc);
+    }
+    for (auto sc: productSCs_)
+    {
+        if (sc <= 0)
+            throw ValueError("Product stoichiometric coefficient must be strictly positive, got %d", sc);
+    }
+
+    if (rate_ <= 0)
+        throw ValueError("Reaction rate must be strictly positive, got %g", rate_);
+
 }
 
 real Reaction::computePropensity(std::span<const int> speciesNumber) const
