@@ -20,9 +20,9 @@ size_t choose(std::span<const real> cumulativeProbs, std::mt19937& gen)
     return k;
 }
 
-void argsort(std::span<const real> a, std::span<int> indices)
+void argsortDecreasingOrder(std::span<const real> a, std::span<int> indices)
 {
-    auto compare = [a](int i, int j) -> bool {return a[i] < a[j];};
+    auto compare = [a](int i, int j) -> bool {return a[i] > a[j];};
 
     std::iota(indices.begin(), indices.end(), 0);
     std::sort(indices.begin(), indices.end(), compare);

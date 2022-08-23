@@ -2,6 +2,10 @@
 #include "R0_leaping.h"
 #include "R1_leaping.h"
 
+#include <ssm/utils/algorithms.h>
+
+#include <numeric>
+
 namespace ssm {
 
 static void computeHor(std::span<const Reaction> reactions,
@@ -40,7 +44,7 @@ static void computeHor(std::span<const Reaction> reactions,
 }
 
 RLeaping::RLeaping(real tend,
-                   real eps, real theta,
+                   real eps, real theta, int sortingPeriod,
                    std::vector<Reaction> reactions,
                    std::vector<int> numSpecies)
     : StochasticSimulationSolver(tend,
@@ -48,7 +52,13 @@ RLeaping::RLeaping(real tend,
                                  std::move(numSpecies))
     , eps_(eps)
     , theta_(theta)
+    , sortingPeriod_(sortingPeriod)
 {
+    sortedReactionsIndices_.resize(reactions_.size(), 0);
+    std::iota(sortedReactionsIndices_.begin(),
+              sortedReactionsIndices_.end(),
+              0);
+
     propensities_   .resize(reactions_.size());
     cumPropensities_.resize(reactions_.size());
     numFirings_     .resize(reactions_.size());
@@ -61,7 +71,6 @@ RLeaping::RLeaping(real tend,
     horOrder_  .resize(numSpecies_.size());
     computeHor(reactions_, hor_, isReactant_, horOrder_);
 }
-
 
 static real computePropensities(std::span<const Reaction> reactions,
                                 std::span<const int> numSpecies,
@@ -121,6 +130,9 @@ void RLeaping::advance()
     const real a0 = computePropensities(reactions_, numSpecies_,
                                         propensities_, cumPropensities_);
 
+    if (step_ % sortingPeriod_ == 0)
+        utils::argsortDecreasingOrder(propensities_, sortedReactionsIndices_);
+
     computeMuHatSigmaHatSq(reactions_, propensities_,
                            muHat_, sigmaHatSq_);
 
@@ -138,14 +150,17 @@ void RLeaping::advance()
         }
         else
         {
-            R1Leaping::sampleNumFirings(L, propensities_, numFirings_, gen_);
+            R1Leaping::sampleNumFirings(L, sortedReactionsIndices_,
+                                        propensities_, numFirings_, gen_);
         }
 
         candidateNumSpecies_ = numSpecies_;
 
         for (size_t i = 0; i < reactions_.size(); ++i)
         {
-            reactions_[i].applyChanges(candidateNumSpecies_, numFirings_[i]);
+            const int ks = numFirings_[i];
+            if (ks)
+                reactions_[i].applyChanges(candidateNumSpecies_, numFirings_[i]);
         }
 
         allSpeciesPositiveAfterChange = true;
@@ -165,6 +180,7 @@ void RLeaping::advance()
     std::gamma_distribution<real> gammaDistr(L, 1.0_r/a0);
     const real tau = gammaDistr(gen_);
     time_ += tau;
+    ++step_;
 }
 
 int RLeaping::computeReactionLeap(real a0) const

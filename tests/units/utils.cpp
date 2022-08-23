@@ -24,14 +24,14 @@ TEST( utils, choose_larger_array )
         ASSERT_EQ(utils::choose(cumP, gen), 3);
 }
 
-TEST( utils, argsort )
+TEST( utils, argsortDecreasingOrder )
 {
     constexpr int n = 6;
     const real a[n] = {3.0_r, 4.0_r, 1.0_r, 2.0_r, 6.0_r, 5.0_r};
-    const int refIndices[n] = {2, 3, 0, 1, 5, 4};
+    const int refIndices[n] = {4, 5, 1, 0, 3, 2};
 
     int indices[n] = {0};
-    utils::argsort(a, indices);
+    utils::argsortDecreasingOrder(a, indices);
 
     for (int i = 0; i < n; ++i)
         ASSERT_EQ(indices[i], refIndices[i]);

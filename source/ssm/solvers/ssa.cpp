@@ -35,6 +35,7 @@ void SSA::advance()
         tau = tend_ - time_;
 
     time_ += tau;
+    ++step_;
 
     if (a0 == 0)
         return;

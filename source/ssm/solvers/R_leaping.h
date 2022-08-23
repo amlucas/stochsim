@@ -10,7 +10,7 @@ class RLeaping: public StochasticSimulationSolver
 {
 public:
     RLeaping(real tend,
-             real eps, real theta,
+             real eps, real theta, int sortingPeriod,
              std::vector<Reaction> reactions,
              std::vector<int> numSpecies);
 
@@ -22,6 +22,8 @@ private:
 private:
     real eps_;
     real theta_;
+    int sortingPeriod_;
+    std::vector<int> sortedReactionsIndices_;
 
     std::vector<real> propensities_;
     std::vector<real> cumPropensities_;

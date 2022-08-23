@@ -1,17 +1,24 @@
 #include "R1_leaping.h"
 
 #include <ssm/utils/algorithms.h>
+#include <numeric>
 
 namespace ssm {
 
-R1Leaping::R1Leaping(real tend, int L,
+R1Leaping::R1Leaping(real tend, int L, int sortingPeriod,
                      std::vector<Reaction> reactions,
                      std::vector<int> numSpecies)
     : StochasticSimulationSolver(tend,
                                  std::move(reactions),
                                  std::move(numSpecies))
     , L_(L)
-{}
+    , sortingPeriod_(sortingPeriod)
+{
+    sortedReactionsIndices_.resize(reactions_.size());
+    std::iota(sortedReactionsIndices_.begin(),
+              sortedReactionsIndices_.end(),
+              0);
+}
 
 void R1Leaping::advance()
 {
@@ -26,19 +33,30 @@ void R1Leaping::advance()
         propensities_[k] = a;
     }
 
+    if (step_ % sortingPeriod_ == 0)
+        utils::argsortDecreasingOrder(propensities_, sortedReactionsIndices_);
+
     std::gamma_distribution<real> gammaDistr(L_, 1.0_r/a0);
 
     const real tau = gammaDistr(gen_);
     time_ += tau;
 
     numFirings_.resize(reactions_.size());
-    sampleNumFirings(L_, propensities_, numFirings_, gen_);
+    sampleNumFirings(L_, sortedReactionsIndices_, propensities_, numFirings_, gen_);
 
     for (size_t i = 0; i < reactions_.size(); ++i)
-        reactions_[i].applyChanges(numSpecies_, numFirings_[i]);
+    {
+        const int ks = numFirings_[i];
+        if (ks)
+            reactions_[i].applyChanges(numSpecies_, ks);
+    }
+
+    ++step_;
 }
 
-void R1Leaping::sampleNumFirings(int L, std::span<const real> propensities,
+void R1Leaping::sampleNumFirings(int L,
+                                 std::span<const int> sortedReactionsIndices,
+                                 std::span<const real> propensities,
                                  std::span<int> numFirings,
                                  std::mt19937& gen)
 {
@@ -56,12 +74,13 @@ void R1Leaping::sampleNumFirings(int L, std::span<const real> propensities,
 
     while(m < propensities.size() && s < L)
     {
-        const real am = propensities[m];
+        const int Im = sortedReactionsIndices[m];
+        const real am = propensities[Im];
 
         std::binomial_distribution<int> B(L-s, am / (a0 - cumA));
 
         const int km = B(gen);
-        numFirings[m] = km;
+        numFirings[Im] = km;
         s += km;
         ++m;
 
@@ -69,7 +88,7 @@ void R1Leaping::sampleNumFirings(int L, std::span<const real> propensities,
     }
 
     if (m == propensities.size()-1)
-        numFirings[m] = L - s;
+        numFirings[sortedReactionsIndices[m]] = L - s;
 }
 
 

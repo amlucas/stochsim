@@ -36,6 +36,8 @@ void R0Leaping::advance()
 
     for (size_t i = 0; i < reactions_.size(); ++i)
         reactions_[i].applyChanges(numSpecies_, numFirings_[i]);
+
+    ++step_;
 }
 
 void R0Leaping::sampleNumFirings(int L,

@@ -9,18 +9,23 @@ namespace ssm {
 class R1Leaping: public StochasticSimulationSolver
 {
 public:
-    R1Leaping(real tend, int L,
+    R1Leaping(real tend, int L, int sortingPeriod,
               std::vector<Reaction> reactions,
               std::vector<int> numSpecies);
 
     void advance() override;
 
-    static void sampleNumFirings(int L, std::span<const real> propensities,
+    static void sampleNumFirings(int L,
+                                 std::span<const int> sortedReactionsIndices,
+                                 std::span<const real> propensities,
                                  std::span<int> numFirings,
                                  std::mt19937& gen);
 
 private:
     int L_;
+    int sortingPeriod_;
+
+    std::vector<int> sortedReactionsIndices_;
 
     std::vector<real> propensities_;
     std::vector<int> numFirings_;

@@ -90,8 +90,9 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, r
     else if (solverType == "R1Leaping")
     {
         const int L = solverConfig.at("L").get<int>();
+        const int sortingPeriod = solverConfig.at("sortingPeriod").get<int>();
 
-        solver = std::make_unique<R1Leaping>(tend, L,
+        solver = std::make_unique<R1Leaping>(tend, L, sortingPeriod,
                                              std::move(reactions),
                                              std::move(initialSpeciesNumbers));
     }
@@ -99,8 +100,9 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, r
     {
         const real eps = solverConfig.at("eps").get<real>();
         const real theta = solverConfig.at("theta").get<real>();
+        const int sortingPeriod = solverConfig.at("sortingPeriod").get<int>();
 
-        solver = std::make_unique<RLeaping>(tend, eps, theta,
+        solver = std::make_unique<RLeaping>(tend, eps, theta, sortingPeriod,
                                             std::move(reactions),
                                             std::move(initialSpeciesNumbers));
     }

@@ -68,6 +68,7 @@ void TauLeaping::advance()
         for (int i = 0; i < numStepsSSA_; ++i)
         {
             ssa_.advance();
+            ++step_;
             if (ssa_.getTime() >= tend_)
                 break;
         }
@@ -154,6 +155,7 @@ void TauLeaping::advance()
         } while (anySpeciesNegative);
 
         time_ += tau;
+        ++step_;
         std::swap(numSpecies_, candidateNumSpecies_);
     }
 }
