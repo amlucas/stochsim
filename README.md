@@ -58,3 +58,24 @@ During the simulation the quantity of the species `[X1]` will not change.
 * extern: external dependencies required by the SSM library.
 * tests: unit tests for the SSM library.
 * tools: additional helper tools for e.g. plotting the results of a simulation.
+
+## References
+
+	Gillespie, D. T. (1977). 
+	Exact stochastic simulation of coupled chemical reactions. 
+	Journal of Physical Chemistry, 81(25), 2340–2361. 
+	https://doi.org/10.1021/j100540a008
+
+
+	Cao, Y., Gillespie, D. T., & Petzold, L. R. (2005). 
+	Avoiding negative populations in explicit Poisson tau-leaping. 
+	Journal of Chemical Physics, 123(5). 
+	https://doi.org/10.1063/1.1992473
+
+
+	Auger, A., Chatelain, P., & Koumoutsakos, P. (2006). 
+	R-leaping: Accelerating the stochastic simulation algorithm by reaction leaps. 
+	Journal of Chemical Physics, 125(8). 
+	https://doi.org/10.1063/1.2218339
+
+
