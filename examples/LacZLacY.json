@@ -28,7 +28,8 @@
 	"dgrRbsLacY": 0,
 	"dgrRbsLacZ": 0,
 	"lactose": 0,
-	"product": 0
+	"product": 0,
+	"LacZlactose": 0
     },
     "reactions": [
         {"rate": 0.17,       "reaction": "PLac + RNAP -> PLacRNAP"},
@@ -55,7 +56,7 @@
 	{"rate": 14,         "reaction": "LacY -> lactose + LacY"}
     ],
     "tend": 2000,
-    "numberOfRuns": 100,
+    "numberOfRuns": 1,
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "LacZLacY.csv",
