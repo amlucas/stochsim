@@ -1,6 +1,6 @@
 #include "ssa.h"
 
-#include <ssm/utils/choose.h>
+#include <ssm/utils/algorithms.h>
 
 namespace ssm {
 
