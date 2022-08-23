@@ -1,5 +1,6 @@
 #include "reaction_parser.h"
-#include <ssm/utils/strprintf.h>
+
+#include <ssm/utils/exceptions.h>
 
 #include <optional>
 #include <span>
@@ -104,7 +105,7 @@ static void checkDuplicates(std::span<const std::string> species)
                 ++count;
         }
         if (count != 1)
-            throw std::runtime_error(utils::strprintf("Duplicated name '%s' in reaction.", name.c_str()));
+            throw FormatError("Duplicated name '%s' in reaction.", name.c_str());
     }
 }
 
@@ -115,7 +116,7 @@ ParsedReactionString parseReactionString(std::string s)
 
     if (reactProds.size() != 2)
     {
-        throw std::runtime_error(utils::strprintf("Wrong reaction format: expect exactly one '->', got '%s'", s.c_str()));
+        throw FormatError("Wrong reaction format: expect exactly one '->', got '%s'", s.c_str());
     }
 
     auto [reactants, reactantsSCs] = parseSpeciesAndStoichiometricCoeffs(reactProds[0]);
@@ -124,16 +125,16 @@ ParsedReactionString parseReactionString(std::string s)
     for (auto r : reactants)
     {
         if (r.size() == 0)
-            throw std::runtime_error("Reactant name is empty.");
+            throw FormatError("Reactant name is empty.");
         if (containsSpaces(r))
-            throw std::runtime_error(utils::strprintf("Invalid reactant name '%s': must not contain spaces.", r.c_str()));
+            throw FormatError("Invalid reactant name '%s': must not contain spaces.", r.c_str());
     }
     for (auto r : products)
     {
         if (r.size() == 0)
-            throw std::runtime_error("Product name is empty.");
+            throw FormatError("Product name is empty.");
         if (containsSpaces(r))
-            throw std::runtime_error(utils::strprintf("Invalid product name '%s': must not contain spaces.", r.c_str()));
+            throw FormatError("Invalid product name '%s': must not contain spaces.", r.c_str());
     }
 
     checkDuplicates(reactants);

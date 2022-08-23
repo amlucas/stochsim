@@ -8,7 +8,7 @@
 #include <ssm/solvers/R_leaping.h>
 #include <ssm/solvers/ssa.h>
 #include <ssm/solvers/tau_leaping.h>
-#include <ssm/utils/strprintf.h>
+#include <ssm/utils/exceptions.h>
 
 namespace ssm {
 namespace factory {
@@ -48,7 +48,7 @@ static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<s
     }
     else
     {
-        throw std::runtime_error(utils::strprintf("Unknown diagnostic type '%s'", type.c_str()));
+        throw SyntaxError("Unknown diagnostic type '%s'", type.c_str());
     }
     return d;
 }
@@ -106,7 +106,7 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, r
     }
     else
     {
-        throw std::runtime_error(utils::strprintf("Unknown solver type '%s'", solverType.c_str()));
+        throw SyntaxError("Unknown solver type '%s'", solverType.c_str());
     }
     return solver;
 }
@@ -143,7 +143,7 @@ Simulation createSimulation(const Json& j)
             }
             else
             {
-                throw std::runtime_error(utils::strprintf("Reactant '%s': missing initial value.", name.c_str()));
+                throw MissingValueError("Reactant '%s': missing initial value.", name.c_str());
             }
         }
 
@@ -155,7 +155,7 @@ Simulation createSimulation(const Json& j)
             }
             else
             {
-                throw std::runtime_error(utils::strprintf("Product '%s': missing initial value.", name.c_str()));
+                throw MissingValueError("Product '%s': missing initial value.", name.c_str());
             }
         }
 

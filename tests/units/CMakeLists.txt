@@ -1,6 +1,7 @@
 add_executable(test_ssm
   main.cpp
   diagnostics.cpp
+  exceptions.cpp
   factory.cpp
   R_leaping.cpp
   reaction.cpp

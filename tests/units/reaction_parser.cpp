@@ -1,4 +1,5 @@
 #include <ssm/reaction_parser.h>
+#include <ssm/utils/exceptions.h>
 
 #include "utils.h"
 
@@ -9,31 +10,31 @@ using namespace ssm;
 TEST( reaction_parser, fails_on_wrong_format )
 {
     ASSERT_THROW_MESSAGE(parseReactionString("A+B->3C->D"),
-                         std::runtime_error,
+                         FormatError,
                          "Wrong reaction format: expect exactly one '->', got 'A+B->3C->D'");
 
     ASSERT_THROW_MESSAGE(parseReactionString("A + 3 -> C"),
-                         std::runtime_error,
+                         FormatError,
                          "Reactant name is empty.");
 
     ASSERT_THROW_MESSAGE(parseReactionString("A + B -> C + "),
-                         std::runtime_error,
+                         FormatError,
                          "Product name is empty.");
 
     ASSERT_THROW_MESSAGE(parseReactionString("A B -> C"),
-                         std::runtime_error,
+                         FormatError,
                          "Invalid reactant name 'A B': must not contain spaces.");
 
     ASSERT_THROW_MESSAGE(parseReactionString("A -> C D"),
-                         std::runtime_error,
+                         FormatError,
                          "Invalid product name 'C D': must not contain spaces.");
 
     ASSERT_THROW_MESSAGE(parseReactionString("A + A -> C"),
-                         std::runtime_error,
+                         FormatError,
                          "Duplicated name 'A' in reaction.");
 
     ASSERT_THROW_MESSAGE(parseReactionString("A -> B + B + C"),
-                         std::runtime_error,
+                         FormatError,
                          "Duplicated name 'B' in reaction.");
 }
 

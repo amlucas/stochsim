@@ -1,4 +1,5 @@
 #include <ssm/factory.h>
+#include <ssm/utils/exceptions.h>
 
 #include "utils.h"
 
@@ -70,7 +71,7 @@ TEST( factory_simulation, missing_initial_reactant_value )
 )");
 
     ASSERT_THROW_MESSAGE(factory::createSimulation(config),
-                         std::runtime_error,
+                         MissingValueError,
                          "Reactant 'A': missing initial value.");
 }
 
@@ -94,7 +95,7 @@ TEST( factory_simulation, missing_initial_product_value )
 )");
 
     ASSERT_THROW_MESSAGE(factory::createSimulation(config),
-                         std::runtime_error,
+                         MissingValueError,
                          "Product 'B': missing initial value.");
 }
 
