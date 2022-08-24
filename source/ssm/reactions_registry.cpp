@@ -1,11 +1,11 @@
-#include "simulation_prototype.h"
+#include "reactions_registry.h"
 
 #include <ssm/reaction_parser.h>
 #include <ssm/utils/exceptions.h>
 
 namespace ssm {
 
-SimulationPrototype::SimulationPrototype(std::vector<std::string> speciesNames)
+ReactionsRegistry::ReactionsRegistry(std::vector<std::string> speciesNames)
     : speciesNames_(std::move(speciesNames))
 {
     const size_t numSpecies = speciesNames_.size();
@@ -21,7 +21,7 @@ SimulationPrototype::SimulationPrototype(std::vector<std::string> speciesNames)
     }
 }
 
-void SimulationPrototype::addReaction(real rate, std::string reactionStr)
+void ReactionsRegistry::addReaction(real rate, std::string reactionStr)
 {
     auto [reactants, rSCs, products, pSCs, isReservoir] = parseReactionString(reactionStr);
 
@@ -57,12 +57,12 @@ void SimulationPrototype::addReaction(real rate, std::string reactionStr)
                             std::move(isReservoir));
 }
 
-std::vector<Reaction> SimulationPrototype::getReactions() const
+std::vector<Reaction> ReactionsRegistry::getReactions() const
 {
     return reactions_;
 }
 
-std::vector<std::string> SimulationPrototype::getSpeciesNames() const
+std::vector<std::string> ReactionsRegistry::getSpeciesNames() const
 {
     return speciesNames_;
 }

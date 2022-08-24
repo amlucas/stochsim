@@ -2,8 +2,7 @@
 
 #include <ssm/diagnostics/collect_tau.h>
 #include <ssm/diagnostics/mean_trajectory.h>
-#include <ssm/reaction_parser.h>
-#include <ssm/simulation_prototype.h>
+#include <ssm/reactions_registry.h>
 #include <ssm/solvers/R0_leaping.h>
 #include <ssm/solvers/R1_leaping.h>
 #include <ssm/solvers/R_leaping.h>
@@ -13,20 +12,6 @@
 
 namespace ssm {
 namespace factory {
-
-Reaction createReaction(const Json& j)
-{
-    const auto rate = j.at("rate").get<real>();
-    auto reactantsIds = j.at("reactants_ids").get<std::vector<SpeciesId>>();
-    auto reactantsSCs = j.at("reactants_scs").get<std::vector<int>>();
-    auto productsIds = j.at("products_ids").get<std::vector<SpeciesId>>();
-    auto productsSCs = j.at("products_scs").get<std::vector<int>>();
-
-    return {rate,
-            std::move(reactantsIds), std::move(reactantsSCs),
-            std::move(productsIds), std::move(productsSCs)};
-}
-
 
 static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<std::string> speciesNames)
 {
@@ -128,7 +113,7 @@ Simulation createSimulation(const Json& j)
         speciesNames.push_back(key);
     }
 
-    SimulationPrototype simulationPrototype(speciesNames);
+    ReactionsRegistry simulationPrototype(speciesNames);
 
     for (auto reaction: j.at("reactions"))
     {

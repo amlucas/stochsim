@@ -14,7 +14,6 @@ namespace factory {
 
 using Json = nlohmann::json;
 
-Reaction createReaction(const Json& j);
 Simulation createSimulation(const Json& j);
 
 } // namespace factory

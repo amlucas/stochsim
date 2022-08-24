@@ -2,8 +2,8 @@ set(sources
   factory.cpp
   reaction.cpp
   reaction_parser.cpp
+  reactions_registry.cpp
   simulation.cpp
-  simulation_prototype.cpp
   )
 
 add_library(ssm STATIC ${sources})

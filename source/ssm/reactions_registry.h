@@ -8,10 +8,10 @@
 
 namespace ssm {
 
-class SimulationPrototype
+class ReactionsRegistry
 {
 public:
-    SimulationPrototype(std::vector<std::string> speciesNames);
+    ReactionsRegistry(std::vector<std::string> speciesNames);
 
     void addReaction(real rate, std::string reaction);
 
