@@ -1,12 +1,37 @@
-#include "reactions_registry.h"
+#include "problem.h"
 
 #include <ssm/reaction_parser.h>
 #include <ssm/utils/exceptions.h>
 
 namespace ssm {
 
-ReactionsRegistry::ReactionsRegistry(std::vector<std::string> speciesNames)
+template<class Key, class Val>
+static std::vector<Key> getKeys(const std::map<Key, Val>& m)
+{
+    std::vector<Key> keys;
+    for (const auto& keyval: m)
+        keys.push_back(keyval.first);
+    return keys;
+}
+
+template<class Key, class Val>
+static std::vector<Val> getVals(const std::map<Key, Val>& m)
+{
+    std::vector<Val> vals;
+    for (const auto& keyval: m)
+        vals.push_back(keyval.second);
+    return vals;
+}
+
+Problem::Problem(std::map<std::string, int> initialSpeciesNumbers)
+    : Problem(getKeys(initialSpeciesNumbers),
+              getVals(initialSpeciesNumbers))
+{}
+
+Problem::Problem(std::vector<std::string> speciesNames,
+                 std::vector<int> initialSpeciesNumbers)
     : speciesNames_(std::move(speciesNames))
+    , initialSpeciesNumbers_(std::move(initialSpeciesNumbers))
 {
     const size_t numSpecies = speciesNames_.size();
 
@@ -21,7 +46,7 @@ ReactionsRegistry::ReactionsRegistry(std::vector<std::string> speciesNames)
     }
 }
 
-void ReactionsRegistry::addReaction(real rate, std::string reactionStr)
+void Problem::addReaction(real rate, std::string reactionStr)
 {
     auto [reactants, rSCs, products, pSCs, isReservoir] = parseReactionString(reactionStr);
 
@@ -57,14 +82,19 @@ void ReactionsRegistry::addReaction(real rate, std::string reactionStr)
                             std::move(isReservoir));
 }
 
-std::vector<Reaction> ReactionsRegistry::getReactions() const
+std::vector<Reaction> Problem::getReactions() const
 {
     return reactions_;
 }
 
-std::vector<std::string> ReactionsRegistry::getSpeciesNames() const
+std::vector<std::string> Problem::getSpeciesNames() const
 {
     return speciesNames_;
+}
+
+std::vector<int> Problem::getInitialSpeciesNumbers() const
+{
+    return initialSpeciesNumbers_;
 }
 
 } // namespace ssm

@@ -6,6 +6,6 @@ namespace py = pybind11;
 
 namespace pyssm {
 
-void exportReactionsRegistry(py::module &m);
+void exportProblem(py::module &m);
 
 }  // namespace pyssm

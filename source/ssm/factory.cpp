@@ -2,7 +2,7 @@
 
 #include <ssm/diagnostics/collect_tau.h>
 #include <ssm/diagnostics/mean_trajectory.h>
-#include <ssm/reactions_registry.h>
+#include <ssm/problem.h>
 #include <ssm/solvers/R0_leaping.h>
 #include <ssm/solvers/R1_leaping.h>
 #include <ssm/solvers/R_leaping.h>
@@ -113,16 +113,16 @@ Simulation createSimulation(const Json& j)
         speciesNames.push_back(key);
     }
 
-    ReactionsRegistry simulationPrototype(speciesNames);
+    Problem problem(speciesNames, initialSpeciesNumbers);
 
     for (auto reaction: j.at("reactions"))
     {
         const real rate = reaction.at("rate").get<real>();
         const std::string reactionStr = reaction.at("reaction").get<std::string>();
-        simulationPrototype.addReaction(rate, reactionStr);
+        problem.addReaction(rate, reactionStr);
     }
 
-    auto solver = createSolver(j, tend, simulationPrototype.getReactions(), initialSpeciesNumbers);
+    auto solver = createSolver(j, tend, problem.getReactions(), initialSpeciesNumbers);
 
     Simulation sim(tend, numRuns,
                    std::move(solver),

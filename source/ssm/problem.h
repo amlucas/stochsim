@@ -8,18 +8,23 @@
 
 namespace ssm {
 
-class ReactionsRegistry
+class Problem
 {
 public:
-    ReactionsRegistry(std::vector<std::string> speciesNames);
+    Problem(std::map<std::string, int> initialSpeciesNumbers);
+
+    Problem(std::vector<std::string> speciesNames,
+            std::vector<int> initialSpeciesNumbers);
 
     void addReaction(real rate, std::string reactionStr);
 
     std::vector<Reaction> getReactions() const;
     std::vector<std::string> getSpeciesNames() const;
+    std::vector<int> getInitialSpeciesNumbers() const;
 
 private:
     std::vector<std::string> speciesNames_;
+    std::vector<int> initialSpeciesNumbers_;
     std::map<std::string, int> speciesNameToIdx_;
     std::vector<Reaction> reactions_;
 };

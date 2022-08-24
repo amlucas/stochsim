@@ -1,6 +1,6 @@
 set(binding_sources
   bindings.cpp
-  reactions_registry.cpp
+  problem.cpp
   )
 
 pybind11_add_module(pyssm MODULE ${binding_sources})

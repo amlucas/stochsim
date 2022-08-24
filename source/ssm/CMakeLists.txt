@@ -1,8 +1,8 @@
 set(sources
   factory.cpp
+  problem.cpp
   reaction.cpp
   reaction_parser.cpp
-  reactions_registry.cpp
   simulation.cpp
   )
 

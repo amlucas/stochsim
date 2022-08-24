@@ -1,9 +1,9 @@
-#include "reactions_registry.h"
+#include "problem.h"
 
 #include <pybind11/pybind11.h>
 
 
 PYBIND11_MODULE(pyssm, m)
 {
-    pyssm::exportReactionsRegistry(m);
+    pyssm::exportProblem(m);
 }
