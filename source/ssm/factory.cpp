@@ -128,7 +128,7 @@ Simulation createSimulation(const Json& j)
         speciesNames.push_back(key);
     }
 
-    SimulationPrototype simulationPrototype(speciesNames, initialSpeciesNumbers);
+    SimulationPrototype simulationPrototype(speciesNames);
 
     for (auto reaction: j.at("reactions"))
     {

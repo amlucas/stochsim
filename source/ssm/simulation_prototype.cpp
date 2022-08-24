@@ -5,15 +5,10 @@
 
 namespace ssm {
 
-SimulationPrototype::SimulationPrototype(std::vector<std::string> speciesNames,
-                                         std::vector<int> initialSpeciesNumbers)
-    : initialSpeciesNumbers_(std::move(initialSpeciesNumbers))
-    , speciesNames_(std::move(speciesNames))
+SimulationPrototype::SimulationPrototype(std::vector<std::string> speciesNames)
+    : speciesNames_(std::move(speciesNames))
 {
-    const size_t numSpecies = initialSpeciesNumbers_.size();
-
-    if (numSpecies != speciesNames_.size())
-        throw ValueError("Mismatch in size of species names and their initial number.");
+    const size_t numSpecies = speciesNames_.size();
 
     for (size_t i = 0; i < numSpecies; ++i)
     {
@@ -65,6 +60,11 @@ void SimulationPrototype::addReaction(real rate, std::string reactionStr)
 std::vector<Reaction> SimulationPrototype::getReactions() const
 {
     return reactions_;
+}
+
+std::vector<std::string> SimulationPrototype::getSpeciesNames() const
+{
+    return speciesNames_;
 }
 
 } // namespace ssm

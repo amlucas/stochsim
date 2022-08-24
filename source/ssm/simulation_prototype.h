@@ -11,15 +11,14 @@ namespace ssm {
 class SimulationPrototype
 {
 public:
-    SimulationPrototype(std::vector<std::string> speciesNames,
-                        std::vector<int> initialSpeciesNumbers);
+    SimulationPrototype(std::vector<std::string> speciesNames);
 
     void addReaction(real rate, std::string reaction);
 
     std::vector<Reaction> getReactions() const;
+    std::vector<std::string> getSpeciesNames() const;
 
 private:
-    std::vector<int> initialSpeciesNumbers_;
     std::vector<std::string> speciesNames_;
     std::map<std::string, int> speciesNameToIdx_;
     std::vector<Reaction> reactions_;
