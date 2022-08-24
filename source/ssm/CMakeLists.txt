@@ -3,9 +3,10 @@ set(sources
   reaction.cpp
   reaction_parser.cpp
   simulation.cpp
+  simulation_prototype.cpp
   )
 
-add_library(ssm SHARED ${sources})
+add_library(ssm STATIC ${sources})
 
 add_subdirectory(diagnostics)
 add_subdirectory(solvers)

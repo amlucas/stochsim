@@ -3,6 +3,7 @@
 #include <ssm/diagnostics/collect_tau.h>
 #include <ssm/diagnostics/mean_trajectory.h>
 #include <ssm/reaction_parser.h>
+#include <ssm/simulation_prototype.h>
 #include <ssm/solvers/R0_leaping.h>
 #include <ssm/solvers/R1_leaping.h>
 #include <ssm/solvers/R_leaping.h>
@@ -120,54 +121,23 @@ Simulation createSimulation(const Json& j)
 
     std::vector<int> initialSpeciesNumbers;
     std::vector<std::string> speciesNames;
-    std::map<std::string, int> speciesNameToIdx;
 
     for (const auto& [key, value] : j.at("initialSpeciesNumbers").items())
     {
-        speciesNameToIdx[key] = (int) speciesNames.size();
         initialSpeciesNumbers.push_back(value);
         speciesNames.push_back(key);
     }
 
-    std::vector<Reaction> reactions;
+    SimulationPrototype simulationPrototype(speciesNames, initialSpeciesNumbers);
+
     for (auto reaction: j.at("reactions"))
     {
         const real rate = reaction.at("rate").get<real>();
-        auto [reactants, rSCs, products, pSCs, isReservoir] = parseReactionString(reaction.at("reaction"));
-
-        std::vector<int> reactantIds, productIds;
-
-        for (auto name : reactants)
-        {
-            if (auto it = speciesNameToIdx.find(name); it != speciesNameToIdx.end())
-            {
-                reactantIds.push_back(it->second);
-            }
-            else
-            {
-                throw MissingValueError("Reactant '%s': missing initial value.", name.c_str());
-            }
-        }
-
-        for (auto name : products)
-        {
-            if (auto it = speciesNameToIdx.find(name); it != speciesNameToIdx.end())
-            {
-                productIds.push_back(it->second);
-            }
-            else
-            {
-                throw MissingValueError("Product '%s': missing initial value.", name.c_str());
-            }
-        }
-
-        reactions.emplace_back(rate,
-                               std::move(reactantIds), std::move(rSCs),
-                               std::move(productIds), std::move(pSCs),
-                               std::move(isReservoir));
+        const std::string reactionStr = reaction.at("reaction").get<std::string>();
+        simulationPrototype.addReaction(rate, reactionStr);
     }
 
-    auto solver = createSolver(j, tend, std::move(reactions), initialSpeciesNumbers);
+    auto solver = createSolver(j, tend, simulationPrototype.getReactions(), initialSpeciesNumbers);
 
     Simulation sim(tend, numRuns,
                    std::move(solver),
