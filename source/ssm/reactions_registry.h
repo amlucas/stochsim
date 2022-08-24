@@ -13,7 +13,7 @@ class ReactionsRegistry
 public:
     ReactionsRegistry(std::vector<std::string> speciesNames);
 
-    void addReaction(real rate, std::string reaction);
+    void addReaction(real rate, std::string reactionStr);
 
     std::vector<Reaction> getReactions() const;
     std::vector<std::string> getSpeciesNames() const;
