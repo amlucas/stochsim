@@ -5,12 +5,12 @@
 #include <pybind11/pybind11.h>
 
 
-PYBIND11_MODULE(pyssym, m)
+PYBIND11_MODULE(pystochsim, m)
 {
-    pyssym::exportProblem(m);
+    pystochsim::exportProblem(m);
 
     auto solver = m.def_submodule("Solver");
-    pyssym::exportSolvers(solver);
+    pystochsim::exportSolvers(solver);
 
-    pyssym::exportRun(m);
+    pystochsim::exportRun(m);
 }

@@ -4,8 +4,8 @@
 
 namespace py = pybind11;
 
-namespace pyssym {
+namespace pystochsim {
 
 void exportSolvers(py::module &m);
 
-}  // namespace pyssym
+}  // namespace pystochsim

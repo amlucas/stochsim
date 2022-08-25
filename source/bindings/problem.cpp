@@ -5,7 +5,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-namespace pyssym {
+namespace pystochsim {
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -21,4 +21,4 @@ void exportProblem(py::module &m)
                   "rate"_a, "reaction_str"_a);
 }
 
-} // namespace pyssym
+} // namespace pystochsim

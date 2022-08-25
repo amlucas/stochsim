@@ -22,10 +22,10 @@ make test
 
 ### From pip
 
-If only the python interface is required, `pyssym` can be installed from pip.
+If only the python interface is required, `pystochsim` can be installed from pip.
 
 ```shell
-python3 -m pip install pyssym
+python3 -m pip install pystochsim
 ```
 
 
