@@ -61,8 +61,10 @@ num_trajectories = 5
 for i in range(num_trajectories):
     time, states = ssm.run_trajectory(problem, solver)
     plt.gca().set_prop_cycle(None)
-    name = "lactose"
-    ax.plot(time, states[name], label=name if i == 0 else None, alpha=1/num_trajectories**0.5)
+    for name in ["LacY", "LacZ"]:
+        ax.plot(time, states[name],
+                label=name if i == 0 else None,
+                alpha=1/num_trajectories**0.5)
 
 ax.set_xlabel(r"$t$")
 ax.set_ylabel(r"$N$")
