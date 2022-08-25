@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
-import pyssm as ssm
+import pyssym as ssm
 
 tend = 20
 problem = ssm.Problem(tend,

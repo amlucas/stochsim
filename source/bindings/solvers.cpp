@@ -9,7 +9,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-namespace pyssm {
+namespace pyssym {
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -41,4 +41,4 @@ void exportSolvers(py::module &m)
              "problem"_a, "eps"_a=0.03_r, "theta"_a=0.4_r, "sorting_period"_a=50);
 }
 
-} // namespace pyssm
+} // namespace pyssym

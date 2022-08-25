@@ -121,13 +121,17 @@ class CMakeBuild(build_ext):
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    name="pyssm",
-    version="0.0.1",
+    name="pyssym",
+    version="1.1.0",
     author="Lucas Amoudruz",
     author_email="amlucas@ethz.ch",
     description="Stochastic Simulation Methods",
-    long_description="",
-    ext_modules=[CMakeExtension("pyssm")],
+    long_description="""Stochastic Simulation Methods
+
+A package for simulating stochastic processes described by reactions.
+Available algorithms include SSA, tau-leaping and R-leaping.
+""",
+    ext_modules=[CMakeExtension("pyssym")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     python_requires=">=3.6",

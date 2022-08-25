@@ -4,8 +4,8 @@
 
 namespace py = pybind11;
 
-namespace pyssm {
+namespace pyssym {
 
 void exportRun(py::module &m);
 
-}  // namespace pyssm
+}  // namespace pyssym

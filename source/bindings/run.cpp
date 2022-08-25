@@ -10,7 +10,7 @@
 #include <tuple>
 #include <vector>
 
-namespace pyssm {
+namespace pyssym {
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -68,4 +68,4 @@ void exportRun(py::module &m)
           "problem"_a, "solver"_a, "min_dt_dump"_a=0.0_r);
 }
 
-} // namespace pyssm
+} // namespace pyssym

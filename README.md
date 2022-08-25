@@ -6,6 +6,8 @@ This library contains implementation of SSA [[1]](#1), tau-leaping [[2]](#2) and
 
 ## Installation
 
+### From the source code
+
 SSM requires c++20.
 
 ```shell
@@ -18,7 +20,18 @@ make -j
 make test
 ```
 
+### From pip
+
+If only the python interface is required, `pyssym` can be installed from pip.
+
+```shell
+python3 -m pip install pyssym
+```
+
+
 ## Running a simulation
+
+### From the c++ executable
 
 Simulations are described in a json file (see the `examples` directory).
 They are composed of a solver (e.g. the SSA algorithm), a list of reactions, the initial conditions, and extra parameters such as the number of runs and the simulation time.
@@ -31,6 +44,12 @@ Running and plotting the results of the Brusselator example:
 ```
 
 ![brusselator](docs/images/brusselator.png)
+
+
+### With python bindings
+
+See [python examples](apps/python).
+
 
 ## Reaction syntax
 

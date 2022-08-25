@@ -1,5 +1,5 @@
 import unittest
-import pyssm as ssm
+import pyssym as ssm
 
 class TestSolver(unittest.TestCase):
 
