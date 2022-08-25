@@ -1,6 +1,7 @@
 set(binding_sources
   bindings.cpp
   problem.cpp
+  run.cpp
   solvers.cpp
   )
 
