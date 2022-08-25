@@ -20,25 +20,25 @@ void exportSolvers(py::module &m)
 {
     py::class_<StochasticSimulationSolver> pySolver(m, "StochasticSimulationSolver");
 
-    py::class_<SSA>(pySolver, "SSA")
-        .def(py::init([](real tend, const Problem& p)
-                      {return SSA(tend, p.getReactions(), p.getInitialSpeciesNumbers());}),
-                "tend"_a, "problem"_a);
+    py::class_<SSA>(m, "SSA", pySolver)
+        .def(py::init([](const Problem& p)
+                      {return SSA(p.getTend(), p.getReactions(), p.getInitialSpeciesNumbers());}),
+                "problem"_a);
 
 
-    py::class_<TauLeaping>(pySolver, "TauLeaping")
-        .def(py::init([](real tend, const Problem& p,
+    py::class_<TauLeaping>(m, "TauLeaping", pySolver)
+        .def(py::init([](const Problem& p,
                          int nc, real eps, real acceptFactor, int numStepsSSA)
-                      {return TauLeaping(tend, nc, eps, acceptFactor, numStepsSSA,
+                      {return TauLeaping(p.getTend(), nc, eps, acceptFactor, numStepsSSA,
                                          p.getReactions(), p.getInitialSpeciesNumbers());}),
-             "tend"_a, "problem"_a, "nc"_a=10, "eps"_a=0.03_r, "accept_factor"_a=10.0_r, "num_steps_SSA"_a=100);
+             "problem"_a, "nc"_a=10, "eps"_a=0.03_r, "accept_factor"_a=10.0_r, "num_steps_SSA"_a=100);
 
-    py::class_<RLeaping>(pySolver, "RLeaping")
-        .def(py::init([](real tend, const Problem& p,
+    py::class_<RLeaping>(m, "RLeaping", pySolver)
+        .def(py::init([](const Problem& p,
                          real eps, real theta, int sortingPeriod)
-                      {return RLeaping(tend, eps, theta, sortingPeriod,
+                      {return RLeaping(p.getTend(), eps, theta, sortingPeriod,
                                        p.getReactions(), p.getInitialSpeciesNumbers());}),
-             "tend"_a, "problem"_a, "eps"_a=0.03_r, "theta"_a=0.4_r, "sorting_period"_a=50);
+             "problem"_a, "eps"_a=0.03_r, "theta"_a=0.4_r, "sorting_period"_a=50);
 }
 
 } // namespace pyssm

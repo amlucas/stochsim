@@ -113,7 +113,7 @@ Simulation createSimulation(const Json& j)
         speciesNames.push_back(key);
     }
 
-    Problem problem(speciesNames, initialSpeciesNumbers);
+    Problem problem(tend, speciesNames, initialSpeciesNumbers);
 
     for (auto reaction: j.at("reactions"))
     {

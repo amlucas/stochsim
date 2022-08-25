@@ -23,14 +23,17 @@ static std::vector<Val> getVals(const std::map<Key, Val>& m)
     return vals;
 }
 
-Problem::Problem(std::map<std::string, int> initialSpeciesNumbers)
-    : Problem(getKeys(initialSpeciesNumbers),
+Problem::Problem(real tend, std::map<std::string, int> initialSpeciesNumbers)
+    : Problem(tend,
+              getKeys(initialSpeciesNumbers),
               getVals(initialSpeciesNumbers))
 {}
 
-Problem::Problem(std::vector<std::string> speciesNames,
+Problem::Problem(real tend,
+                 std::vector<std::string> speciesNames,
                  std::vector<int> initialSpeciesNumbers)
-    : speciesNames_(std::move(speciesNames))
+    : tend_(tend)
+    , speciesNames_(std::move(speciesNames))
     , initialSpeciesNumbers_(std::move(initialSpeciesNumbers))
 {
     const size_t numSpecies = speciesNames_.size();
@@ -80,6 +83,11 @@ void Problem::addReaction(real rate, std::string reactionStr)
                             std::move(reactantIds), std::move(rSCs),
                             std::move(productIds), std::move(pSCs),
                             std::move(isReservoir));
+}
+
+real Problem::getTend() const
+{
+    return tend_;
 }
 
 std::vector<Reaction> Problem::getReactions() const
