@@ -13,6 +13,94 @@
 namespace ssm {
 namespace factory {
 
+static std::unique_ptr<Problem> createProblem(const Json& j)
+{
+    const real tend = j.at("tend").get<real>();
+    std::vector<int> initialSpeciesNumbers;
+    std::vector<std::string> speciesNames;
+
+    for (const auto& [key, value] : j.at("initialSpeciesNumbers").items())
+    {
+        initialSpeciesNumbers.push_back(value);
+        speciesNames.push_back(key);
+    }
+
+    auto problem = std::make_unique<Problem>(tend,
+                                             std::move(speciesNames),
+                                             std::move(initialSpeciesNumbers));
+
+    for (auto reaction: j.at("reactions"))
+    {
+        const real rate = reaction.at("rate").get<real>();
+        const std::string reactionStr = reaction.at("reaction").get<std::string>();
+        problem->addReaction(rate, reactionStr);
+    }
+
+    return problem;
+}
+
+static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, const Problem *p)
+{
+    const auto solverConfig = j.at("solver");
+    const std::string solverType = solverConfig.at("type").get<std::string>();
+
+    std::unique_ptr<StochasticSimulationSolver> solver;
+
+    if (solverType == "SSA")
+    {
+        solver = std::make_unique<SSA>(p->getTend(),
+                                       p->getReactions(),
+                                       p->getInitialSpeciesNumbers());
+    }
+    else if (solverType == "TauLeaping")
+    {
+        const real nc = solverConfig.at("nc").get<int>();
+        const real eps = solverConfig.at("eps").get<real>();
+        const real acceptFactor = solverConfig.at("acceptFactor").get<real>();
+        const int numStepsSSA = solverConfig.at("numStepsSSA").get<int>();
+
+        solver = std::make_unique<TauLeaping>(p->getTend(),
+                                              nc, eps, acceptFactor, numStepsSSA,
+                                              p->getReactions(),
+                                              p->getInitialSpeciesNumbers());
+    }
+    else if (solverType == "R0Leaping")
+    {
+        const int L = solverConfig.at("L").get<int>();
+
+        solver = std::make_unique<R0Leaping>(p->getTend(),
+                                             L,
+                                             p->getReactions(),
+                                             p->getInitialSpeciesNumbers());
+    }
+    else if (solverType == "R1Leaping")
+    {
+        const int L = solverConfig.at("L").get<int>();
+        const int sortingPeriod = solverConfig.at("sortingPeriod").get<int>();
+
+        solver = std::make_unique<R1Leaping>(p->getTend(),
+                                             L, sortingPeriod,
+                                             p->getReactions(),
+                                             p->getInitialSpeciesNumbers());
+    }
+    else if (solverType == "RLeaping")
+    {
+        const real eps = solverConfig.at("eps").get<real>();
+        const real theta = solverConfig.at("theta").get<real>();
+        const int sortingPeriod = solverConfig.at("sortingPeriod").get<int>();
+
+        solver = std::make_unique<RLeaping>(p->getTend(),
+                                            eps, theta, sortingPeriod,
+                                            p->getReactions(),
+                                            p->getInitialSpeciesNumbers());
+    }
+    else
+    {
+        throw SyntaxError("Unknown solver type '%s'", solverType.c_str());
+    }
+    return solver;
+}
+
 static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<std::string> speciesNames)
 {
     std::unique_ptr<Diagnostic> d;
@@ -39,102 +127,27 @@ static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<s
     return d;
 }
 
-static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, real tend,
-                                                                std::vector<Reaction> reactions,
-                                                                std::vector<int> initialSpeciesNumbers)
-{
-    const auto solverConfig = j.at("solver");
-    const std::string solverType = solverConfig.at("type").get<std::string>();
-
-    std::unique_ptr<StochasticSimulationSolver> solver;
-
-    if (solverType == "SSA")
-    {
-        solver = std::make_unique<SSA>(tend,
-                                       std::move(reactions),
-                                       std::move(initialSpeciesNumbers));
-    }
-    else if (solverType == "TauLeaping")
-    {
-        const real nc = solverConfig.at("nc").get<int>();
-        const real eps = solverConfig.at("eps").get<real>();
-        const real acceptFactor = solverConfig.at("acceptFactor").get<real>();
-        const int numStepsSSA = solverConfig.at("numStepsSSA").get<int>();
-
-        solver = std::make_unique<TauLeaping>(tend, nc, eps, acceptFactor, numStepsSSA,
-                                              std::move(reactions),
-                                              std::move(initialSpeciesNumbers));
-    }
-    else if (solverType == "R0Leaping")
-    {
-        const int L = solverConfig.at("L").get<int>();
-
-        solver = std::make_unique<R0Leaping>(tend, L,
-                                             std::move(reactions),
-                                             std::move(initialSpeciesNumbers));
-    }
-    else if (solverType == "R1Leaping")
-    {
-        const int L = solverConfig.at("L").get<int>();
-        const int sortingPeriod = solverConfig.at("sortingPeriod").get<int>();
-
-        solver = std::make_unique<R1Leaping>(tend, L, sortingPeriod,
-                                             std::move(reactions),
-                                             std::move(initialSpeciesNumbers));
-    }
-    else if (solverType == "RLeaping")
-    {
-        const real eps = solverConfig.at("eps").get<real>();
-        const real theta = solverConfig.at("theta").get<real>();
-        const int sortingPeriod = solverConfig.at("sortingPeriod").get<int>();
-
-        solver = std::make_unique<RLeaping>(tend, eps, theta, sortingPeriod,
-                                            std::move(reactions),
-                                            std::move(initialSpeciesNumbers));
-    }
-    else
-    {
-        throw SyntaxError("Unknown solver type '%s'", solverType.c_str());
-    }
-    return solver;
-}
 
 Simulation createSimulation(const Json& j)
 {
-    const real tend = j.at("tend").get<real>();
     const int numRuns = j.at("numberOfRuns").get<int>();
 
-    std::vector<int> initialSpeciesNumbers;
-    std::vector<std::string> speciesNames;
+    auto problem = createProblem(j);
+    auto solver = createSolver(j, problem.get());
 
-    for (const auto& [key, value] : j.at("initialSpeciesNumbers").items())
-    {
-        initialSpeciesNumbers.push_back(value);
-        speciesNames.push_back(key);
-    }
-
-    Problem problem(tend, speciesNames, initialSpeciesNumbers);
-
-    for (auto reaction: j.at("reactions"))
-    {
-        const real rate = reaction.at("rate").get<real>();
-        const std::string reactionStr = reaction.at("reaction").get<std::string>();
-        problem.addReaction(rate, reactionStr);
-    }
-
-    auto solver = createSolver(j, tend, problem.getReactions(), initialSpeciesNumbers);
-
-    Simulation sim(tend, numRuns,
+    Simulation sim(problem->getTend(),
+                   numRuns,
                    std::move(solver),
-                   std::move(initialSpeciesNumbers),
-                   speciesNames);
+                   problem->getInitialSpeciesNumbers(),
+                   problem->getSpeciesNames());
 
     if (j.contains("diagnostics"))
     {
         for (auto diagConfig : j.at("diagnostics"))
         {
             const auto fname = diagConfig.at("fileName").get<std::string>();
-            sim.attachDiagnostic(createDiagnostic(diagConfig, speciesNames),
+            sim.attachDiagnostic(createDiagnostic(diagConfig,
+                                                  problem->getSpeciesNames()),
                                  fname);
         }
     }
