@@ -21,7 +21,9 @@ using TimeSequence = std::vector<real>;
 using StatesSequence = std::map<std::string, std::vector<real>>;
 
 static std::tuple<TimeSequence, StatesSequence>
-runTrajectory(const Problem& p, StochasticSimulationSolver *solver)
+runTrajectory(const Problem& p,
+              StochasticSimulationSolver *solver,
+              real minDeltatDump=0.0_r)
 {
     TimeSequence time;
     StatesSequence states;
@@ -33,22 +35,28 @@ runTrajectory(const Problem& p, StochasticSimulationSolver *solver)
 
     solver->reset(p.getInitialSpeciesNumbers());
 
-    time.push_back(solver->getTime());
-
-    const auto state = solver->getState();
-    for (size_t i = 0; i < speciesNames.size(); ++i)
-        states[speciesNames[i]].push_back(state[i]);
-
-    while(solver->getTime() < p.getTend())
+    auto recordState = [&]()
     {
-        solver->advance();
-
         time.push_back(solver->getTime());
 
         const auto state = solver->getState();
         for (size_t i = 0; i < speciesNames.size(); ++i)
             states[speciesNames[i]].push_back(state[i]);
+    };
+
+    real lastDumpTime = -minDeltatDump - 1.0_r;
+
+    while(solver->getTime() < p.getTend())
+    {
+        if (solver->getTime() > lastDumpTime + minDeltatDump)
+        {
+            lastDumpTime = solver->getTime();
+            recordState();
+        }
+
+        solver->advance();
     }
+    recordState();
 
     return {std::move(time),
             std::move(states)};
@@ -57,7 +65,7 @@ runTrajectory(const Problem& p, StochasticSimulationSolver *solver)
 void exportRun(py::module &m)
 {
     m.def("run_trajectory", &runTrajectory,
-          "problem"_a, "solver"_a);
+          "problem"_a, "solver"_a, "min_dt_dump"_a=0.0_r);
 }
 
 } // namespace pyssm

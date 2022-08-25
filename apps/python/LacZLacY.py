@@ -59,7 +59,7 @@ fig, ax = plt.subplots()
 num_trajectories = 5
 
 for i in range(num_trajectories):
-    time, states = ssm.run_trajectory(problem, solver)
+    time, states = ssm.run_trajectory(problem, solver, min_dt_dump=5)
     plt.gca().set_prop_cycle(None)
     for name in ["LacY", "LacZ"]:
         ax.plot(time, states[name],
