@@ -41,13 +41,13 @@ runTrajectory(const Problem& p, StochasticSimulationSolver *solver)
 
     while(solver->getTime() < p.getTend())
     {
+        solver->advance();
+
         time.push_back(solver->getTime());
 
         const auto state = solver->getState();
         for (size_t i = 0; i < speciesNames.size(); ++i)
             states[speciesNames[i]].push_back(state[i]);
-
-        solver->advance();
     }
 
     return {std::move(time),
