@@ -21,7 +21,6 @@
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "brusselator.csv",
-         "tend": 14,
          "numBins": 500}
     ]
 }

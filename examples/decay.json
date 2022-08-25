@@ -14,7 +14,6 @@
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "decay.csv",
-         "tend": 10,
          "numBins": 500},
         {"type": "collectTau",
          "fileName": "decay_tau.csv",

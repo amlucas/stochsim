@@ -101,7 +101,7 @@ static std::unique_ptr<StochasticSimulationSolver> createSolver(const Json& j, c
     return solver;
 }
 
-static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<std::string> speciesNames)
+static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, const Problem *p)
 {
     std::unique_ptr<Diagnostic> d;
 
@@ -110,9 +110,8 @@ static std::unique_ptr<Diagnostic> createDiagnostic(const Json& j, std::vector<s
     if (type == "meanTrajectory")
     {
         const int numBins = j.at("numBins").get<int>();
-        const real tend = j.at("tend").get<real>();
 
-        d = std::make_unique<MeanTrajectoryDiagnostic>(std::move(speciesNames), tend, numBins);
+        d = std::make_unique<MeanTrajectoryDiagnostic>(p->getSpeciesNames(), p->getTend(), numBins);
     }
     else if (type == "collectTau")
     {
@@ -146,8 +145,7 @@ Simulation createSimulation(const Json& j)
         for (auto diagConfig : j.at("diagnostics"))
         {
             const auto fname = diagConfig.at("fileName").get<std::string>();
-            sim.attachDiagnostic(createDiagnostic(diagConfig,
-                                                  problem->getSpeciesNames()),
+            sim.attachDiagnostic(createDiagnostic(diagConfig, problem.get()),
                                  fname);
         }
     }

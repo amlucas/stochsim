@@ -132,7 +132,6 @@ TEST( factory_simulation, with_diagnostic )
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "test.csv",
-         "tend": 100,
          "numBins": 500}
     ]
 }

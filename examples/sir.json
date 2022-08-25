@@ -2,7 +2,8 @@
     "solver" : {
         "type": "RLeaping",
 	"eps": 0.03,
-	"theta": 0.1
+	"theta": 0.1,
+	"sortingPeriod": 50
     },
     "initialSpeciesNumbers": {
         "S": 5000,
@@ -18,7 +19,6 @@
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "sir.csv",
-         "tend": 20,
          "numBins": 500}
     ]
 }

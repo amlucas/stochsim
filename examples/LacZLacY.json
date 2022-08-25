@@ -60,7 +60,6 @@
     "diagnostics" : [
         {"type": "meanTrajectory",
          "fileName": "LacZLacY.csv",
-         "tend": 2000,
          "numBins": 5000},
 
 	{"type": "collectTau",
