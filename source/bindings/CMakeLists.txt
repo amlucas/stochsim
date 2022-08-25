@@ -1,6 +1,7 @@
 set(binding_sources
   bindings.cpp
   problem.cpp
+  solvers.cpp
   )
 
 pybind11_add_module(pyssm MODULE ${binding_sources})
