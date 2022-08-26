@@ -6,5 +6,5 @@ set(binding_sources
   )
 
 pybind11_add_module(pystochsim MODULE ${binding_sources})
-target_link_libraries(pystochsim PRIVATE ssm)
-set_property(TARGET ssm PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(pystochsim PRIVATE stochsim)
+set_property(TARGET stochsim PROPERTY POSITION_INDEPENDENT_CODE ON)

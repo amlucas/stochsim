@@ -1,4 +1,4 @@
-#include <ssm/factory.h>
+#include <stochsim/factory.h>
 
 #include <fstream>
 
@@ -11,8 +11,8 @@ int main(int argc, char **argv)
     }
 
     std::ifstream jsonFile(argv[1]);
-    auto config = ssm::factory::Json::parse(jsonFile);
-    auto sim = ssm::factory::createSimulation(config);
+    auto config = stochsim::factory::Json::parse(jsonFile);
+    auto sim = stochsim::factory::createSimulation(config);
     sim.run();
 
     return 0;

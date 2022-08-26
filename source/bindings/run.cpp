@@ -1,7 +1,7 @@
 #include "run.h"
 
-#include <ssm/problem.h>
-#include <ssm/solvers/solver.h>
+#include <stochsim/problem.h>
+#include <stochsim/solvers/solver.h>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -15,7 +15,7 @@ namespace pystochsim {
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-using namespace ssm;
+using namespace stochsim;
 
 using TimeSequence = std::vector<real>;
 using StatesSequence = std::map<std::string, std::vector<real>>;

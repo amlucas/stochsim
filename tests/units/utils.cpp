@@ -1,8 +1,8 @@
-#include <ssm/utils/algorithms.h>
+#include <stochsim/utils/algorithms.h>
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( utils, choose_one_entry_always_zero )
 {

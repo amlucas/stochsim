@@ -1,8 +1,8 @@
-#include <ssm/solvers/tau_leaping.h>
+#include <stochsim/solvers/tau_leaping.h>
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 template <class Method>
 std::vector<int> collectReaction6Gillepsie2007(real tend,

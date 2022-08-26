@@ -122,11 +122,11 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="pystochsim",
-    version="1.0.0",
+    version="1.1.0",
     author="Lucas Amoudruz",
     author_email="amlucas@ethz.ch",
     description="Stochastic Simulation Methods",
-    long_description="""Stochastic Simulation Methods
+    long_description="""Stochsim: Stochastic Simulation Methods
 
 A package for simulating stochastic processes described by reactions.
 Available algorithms include SSA, tau-leaping and R-leaping.

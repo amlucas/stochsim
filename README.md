@@ -1,4 +1,4 @@
-# SSM: Stochastic simulation methods
+# stochsim: Stochastic simulation methods
 
 A library for simulating stochastic processes that consist of reactions.
 A reaction is described by a list of reactants, products and an associated reaction rate.
@@ -8,7 +8,7 @@ This library contains implementation of SSA [[1]](#1), tau-leaping [[2]](#2) and
 
 ### From the source code
 
-SSM requires c++20.
+Stochsim requires c++20.
 
 ```shell
 git clone https://github.com/amlucas/SSM.git --recursive
@@ -74,10 +74,10 @@ During the simulation the quantity of the species `[X1]` will not change.
 ## Structure of this repository
 
 * apps: source code for standalone executables.
-* source: source code of the SSM library.
+* source: source code of the STOCHSIM library.
 * examples: example json file of stochastic simulations.
-* extern: external dependencies required by the SSM library.
-* tests: unit tests for the SSM library.
+* extern: external dependencies required by the STOCHSIM library.
+* tests: unit tests for the STOCHSIM library.
 * tools: additional helper tools for e.g. plotting the results of a simulation.
 
 ## References

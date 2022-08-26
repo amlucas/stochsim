@@ -1,8 +1,8 @@
-#include <ssm/solvers/ssa.h>
+#include <stochsim/solvers/ssa.h>
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( ssa, decay )
 {

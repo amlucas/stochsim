@@ -1,11 +1,11 @@
-#include <ssm/solvers/R0_leaping.h>
-#include <ssm/solvers/R1_leaping.h>
+#include <stochsim/solvers/R0_leaping.h>
+#include <stochsim/solvers/R1_leaping.h>
 
-#include <ssm/utils/algorithms.h>
+#include <stochsim/utils/algorithms.h>
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( R0_sampling, numFirings_sum_up_to_L )
 {

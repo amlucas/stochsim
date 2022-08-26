@@ -1,10 +1,10 @@
-#include <ssm/utils/exceptions.h>
+#include <stochsim/utils/exceptions.h>
 
 #include "utils.h"
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( exceptions, construct_message )
 {

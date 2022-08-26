@@ -1,11 +1,11 @@
-#include <ssm/reaction.h>
+#include <stochsim/reaction.h>
 #include "utils.h"
 
-#include <ssm/utils/exceptions.h>
+#include <stochsim/utils/exceptions.h>
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( reaction, throw_errors_for_wrong_values )
 {

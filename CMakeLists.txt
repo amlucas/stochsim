@@ -7,10 +7,10 @@ if (NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-project(ssm LANGUAGES C CXX VERSION 0.1.0)
+project(stochsim LANGUAGES C CXX VERSION 0.1.0)
 enable_testing()
 
-set(ssm_definitions "")
+set(stochsim_definitions "")
 
 add_subdirectory(apps)
 add_subdirectory(extern)

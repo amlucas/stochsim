@@ -1,11 +1,11 @@
-#include <ssm/diagnostics/collect_tau.h>
-#include <ssm/diagnostics/mean_trajectory.h>
+#include <stochsim/diagnostics/collect_tau.h>
+#include <stochsim/diagnostics/mean_trajectory.h>
 
 #include <gtest/gtest.h>
 
 #include <sstream>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( mean_trajectory_diagnostic, mean_one_sample_is_sample )
 {

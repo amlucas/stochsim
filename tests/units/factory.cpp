@@ -1,11 +1,11 @@
-#include <ssm/factory.h>
-#include <ssm/utils/exceptions.h>
+#include <stochsim/factory.h>
+#include <stochsim/utils/exceptions.h>
 
 #include "utils.h"
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( factory_simulation, from_json_ssa )
 {

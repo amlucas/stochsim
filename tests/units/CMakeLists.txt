@@ -1,4 +1,4 @@
-add_executable(test_ssm
+add_executable(test_stochsim
   main.cpp
   diagnostics.cpp
   exceptions.cpp
@@ -10,5 +10,5 @@ add_executable(test_ssm
   tau_leaping.cpp
   utils.cpp)
 
-target_link_libraries(test_ssm gtest ssm)
-add_test(NAME test_ssm COMMAND test_ssm)
+target_link_libraries(test_stochsim gtest stochsim)
+add_test(NAME test_stochsim COMMAND test_stochsim)

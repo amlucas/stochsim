@@ -1,11 +1,11 @@
-#include <ssm/reaction_parser.h>
-#include <ssm/utils/exceptions.h>
+#include <stochsim/reaction_parser.h>
+#include <stochsim/utils/exceptions.h>
 
 #include "utils.h"
 
 #include <gtest/gtest.h>
 
-using namespace ssm;
+using namespace stochsim;
 
 TEST( reaction_parser, fails_on_wrong_format )
 {
