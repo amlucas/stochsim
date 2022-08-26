@@ -43,7 +43,7 @@ Problem::Problem(real tend,
         const std::string name = speciesNames_[i];
 
         if (initialSpeciesNumbers_[i] < 0)
-            throw ValueError("Species '%s' has a wrong initial value, must non-negative (got %d).",
+            throw ValueError("Species '%s' has a wrong initial value, must be non-negative (got %d).",
                              name.c_str(), initialSpeciesNumbers_[i]);
 
         if (speciesNameToIdx_.find(name) != speciesNameToIdx_.end())

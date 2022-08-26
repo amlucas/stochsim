@@ -3,6 +3,7 @@ add_executable(test_stochsim
   diagnostics.cpp
   exceptions.cpp
   factory.cpp
+  problem.cpp
   R_leaping.cpp
   reaction.cpp
   reaction_parser.cpp
