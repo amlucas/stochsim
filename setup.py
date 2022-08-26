@@ -130,6 +130,8 @@ setup(
 
 A package for simulating stochastic processes described by reactions.
 Available algorithms include SSA, tau-leaping and R-leaping.
+
+github webpage: https://github.com/amlucas/stochsim
 """,
     ext_modules=[CMakeExtension("pystochsim")],
     cmdclass={"build_ext": CMakeBuild},
