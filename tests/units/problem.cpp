@@ -17,3 +17,21 @@ TEST( problem, throw_errors_for_wrong_initial_species )
                          ValueError,
                          "Species 'A' has been provided more than once.");
 }
+
+TEST( problem, throw_errors_for_missing_initial_species )
+{
+    ASSERT_THROW_MESSAGE({
+            Problem p(10.0_r, {{"B", 5}});
+            p.addReaction(0.1_r, "A->B");
+        },
+        MissingValueError,
+        "Reactant 'A': missing initial value.");
+
+
+    ASSERT_THROW_MESSAGE({
+            Problem p(10.0_r, {{"A", 5}, {"C",0}});
+            p.addReaction(0.1_r, "A->B+C");
+        },
+        MissingValueError,
+        "Product 'B': missing initial value.");
+}

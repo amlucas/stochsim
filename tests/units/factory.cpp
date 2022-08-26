@@ -1,8 +1,6 @@
 #include <stochsim/factory.h>
 #include <stochsim/utils/exceptions.h>
 
-#include "utils.h"
-
 #include <gtest/gtest.h>
 
 using namespace stochsim;
@@ -30,54 +28,6 @@ TEST( factory_simulation, from_json_ssa )
 
     EXPECT_NO_THROW( factory::createSimulation(config) );
 }
-
-TEST( factory_simulation, missing_initial_reactant_value )
-{
-    const auto config = factory::Json::parse(R"(
-{
-    "solver" : {
-        "type": "SSA"
-    },
-    "initialSpeciesNumbers": {
-        "B": 10
-    },
-    "reactions": [
-        {"rate": 1.0, "reaction": "A->B"}
-    ],
-    "tend": 0.1,
-    "numberOfRuns": 1
-}
-)");
-
-    ASSERT_THROW_MESSAGE(factory::createSimulation(config),
-                         MissingValueError,
-                         "Reactant 'A': missing initial value.");
-}
-
-
-TEST( factory_simulation, missing_initial_product_value )
-{
-    const auto config = factory::Json::parse(R"(
-{
-    "solver" : {
-        "type": "SSA"
-    },
-    "initialSpeciesNumbers": {
-        "A": 10
-    },
-    "reactions": [
-        {"rate": 1.0, "reaction": "A->B"}
-    ],
-    "tend": 0.1,
-    "numberOfRuns": 1
-}
-)");
-
-    ASSERT_THROW_MESSAGE(factory::createSimulation(config),
-                         MissingValueError,
-                         "Product 'B': missing initial value.");
-}
-
 
 TEST( factory_simulation, from_json_tau_leaping )
 {
